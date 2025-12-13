@@ -1,0 +1,1 @@
+app/page.js app/layout.js app/globals.css app/api/search/route.js app/legal/privacy/page.js app/legal/terms/page.js app/legal/disclosure/page.js components/ProductCard.jsx components/SearchFilters.jsx components/Header.jsx components/Footer.jsx lib/affiliates.js lib/normalize.js public/logo.png
