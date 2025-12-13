@@ -1,5 +1,5 @@
-
-{  "name": "tallz",
+{  
+  "name": "tallz",
   "private": true,
   "scripts": {
     "dev": "next dev",
