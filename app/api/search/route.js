@@ -1,31 +1,32 @@
-export async function GET() {
-return Response.json([
+export async function GET(request) {
+const { searchParams } = new URL(request.url)
+const category = searchParams.get('category')
+
+
+const products = [
 {
-id: '1',
-title: 'High‑rise wide‑leg jeans (Tall)',
-store: 'ASOS Tall',
-price: 89,
-tall: true,
-image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=800',
-url: 'https://www.asos.com'
+id: 'gap-tall-tunic-001',
+title: 'Tall Tunic Top',
+brand: 'Gap',
+category: 'tops',
+image: 'https://dummyimage.com/400x500/e5e7eb/111827&text=Tall+Tunic+Top',
+url: 'https://www.gapcanada.ca',
 },
 {
-id: '2',
-title: 'Long sleeve maxi dress — Tall fit',
-store: 'Long Tall Sally',
-price: 129,
-tall: true,
-image: 'https://images.unsplash.com/photo-1514996937319-344454492b37?w=800',
-url: 'https://www.longtallsally.com'
+id: 'oldnavy-tall-legging-001',
+title: 'Tall Active Leggings',
+brand: 'Old Navy',
+category: 'workout',
+image: 'https://dummyimage.com/400x500/e5e7eb/111827&text=Tall+Leggings',
+url: 'https://www.oldnavy.ca',
 },
-{
-id: '3',
-title: 'Regular blazer (not tall)',
-store: 'Zara',
-price: 110,
-tall: false,
-image: 'https://images.unsplash.com/photo-1520974735194-6c8f16c31c0c?w=800',
-url: 'https://www.zara.com'
-}
-])
+]
+
+
+const filtered = category
+? products.filter(p => p.category === category)
+: products
+
+
+return Response.json(filtered)
 }
