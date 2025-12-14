@@ -10,7 +10,9 @@ description: 'Find tall‑friendly clothes for women that ship to Canada.'
 export default function RootLayout({ children }) {
 return (
 <html lang="en">
-<body className="bg-gray-50 text-gray-900">{children}</body>
+<body className="bg-gray-50 text-gray-900">{children}
+  <Footer />
+  </body>
 </html>
 )
 }
