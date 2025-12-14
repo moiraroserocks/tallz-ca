@@ -2,62 +2,63 @@
 
 
 import { useEffect, useState } from 'react'
-import ProductCard from '../components/ProductCard'
 
 
-const CATEGORIES = ['all', 'tops', 'bottoms', 'dresses', 'workout', 'outdoors']
+const categories = ['all', 'tops', 'bottoms', 'workout', 'outdoors']
 
 
-export default function HomePage() {
+export default function Home() {
 const [products, setProducts] = useState([])
-const [loading, setLoading] = useState(true)
 const [category, setCategory] = useState('all')
 
 
 useEffect(() => {
-async function load() {
-try {
-const res = await fetch(`/api/search?category=${category}`)
-const data = await res.json()
-setProducts(data)
-} catch (e) {
-console.error(e)
-} finally {
-setLoading(false)
-}
-}
-load()
+const url = category === 'all'
+? '/api/search'
+: `/api/search?category=${category}`
+
+
+fetch(url)
+.then(res => res.json())
+.then(setProducts)
 }, [category])
 
 
 return (
-<main className="max-w-7xl mx-auto px-4 py-8">
-<h1 className="text-3xl font-bold mb-2">Tall women clothing — Canada</h1>
-<p className="text-gray-600 mb-6">
-Find tall‑friendly clothes that ship to Canada. Filter by clothing type.
-</p>
+<main className="p-6">
+<h1 className="text-2xl font-bold mb-4">Tall women clothing in Canada</h1>
 
 
-{/* Category filter */}
-<div className="mb-6 flex flex-wrap gap-2">
-{CATEGORIES.map(cat => (
+<div className="flex gap-2 mb-6">
+{categories.map(c => (
 <button
-key={cat}
-onClick={() => setCategory(cat)}
-className={`px-4 py-2 rounded-full text-sm border ${category === cat ? 'bg-black text-white' : 'bg-white'}`}
+key={c}
+onClick={() => setCategory(c)}
+className="px-3 py-1 rounded bg-gray-200"
 >
-{cat.charAt(0).toUpperCase() + cat.slice(1)}
+{c}
 </button>
 ))}
 </div>
 
 
-{loading && <p>Loading products…</p>}
-
-
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-{products.map(product => (
-<ProductCard key={product.id} product={product} />
+<div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+{products.map(p => (
+<a
+key={p.id}
+href={p.url}
+target="_blank"
+rel="noopener noreferrer"
+className="border rounded p-3 hover:shadow"
+>
+<img
+src={p.image}
+alt={p.title}
+className="w-full h-60 object-cover mb-2"
+/>
+<h3 className="font-medium">{p.title}</h3>
+<p className="text-sm text-gray-600">{p.brand}</p>
+</a>
 ))}
 </div>
 </main>
