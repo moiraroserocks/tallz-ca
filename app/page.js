@@ -17,7 +17,11 @@ export default function Home() {
         const params = new URLSearchParams()
         if (category !== 'all') params.set('category', category)
         if (query.trim()) params.set('q', query.trim())
-        const url = params.toString() ? `/api/search?${params}` : '/api/search'
+
+        const url = params.toString()
+          ? `/api/search?${params.toString()}`
+          : '/api/search'
+
         const res = await fetch(url)
         const data = await res.json()
         setProducts(Array.isArray(data) ? data : [])
@@ -28,6 +32,7 @@ export default function Home() {
         setLoading(false)
       }
     }
+
     load()
   }, [category, query])
 
@@ -43,7 +48,6 @@ export default function Home() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Top “store” bar */}
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">
