@@ -1,37 +1,34 @@
 export default function ProductCard({ product }) {
-return (
-<div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition bg-white">
-<img
-src={product.image}
-alt={product.title}
-className="h-64 w-full object-cover"
-/>
+  return (
+    <a
+      href={product.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block rounded-2xl border bg-white overflow-hidden hover:shadow-sm transition"
+    >
+      <div className="aspect-[4/5] bg-gray-50 overflow-hidden">
+        <img
+          src={product.image}
+          alt={product.title}
+          className="h-full w-full object-cover transition group-hover:scale-[1.02]"
+          loading="lazy"
+        />
+      </div>
 
+      <div className="p-3">
+        <div className="text-xs text-gray-500">
+          {product.brand || product.store || 'Store'}
+        </div>
+        <div className="mt-1 text-sm font-medium leading-snug">
+          {product.title}
+        </div>
 
-<div className="p-4">
-<p className="text-sm text-gray-500">{product.store}</p>
-<h2 className="font-medium mt-1">{product.title}</h2>
-
-
-<div className="flex items-center justify-between mt-3">
-<span className="font-semibold">${product.price} CAD</span>
-<a
-href={product.url}
-target="_blank"
-rel="noopener noreferrer"
-className="text-sm px-3 py-1 border rounded-full hover:bg-black hover:text-white"
->
-Buy
-</a>
-</div>
-
-
-{product.tall && (
-<span className="inline-block mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-Tall‑friendly
-</span>
-)}
-</div>
-</div>
-)
-  }
+        {product.tall && (
+          <div className="mt-2 inline-flex text-[11px] px-2 py-1 rounded-full border">
+            Tall-friendly
+          </div>
+        )}
+      </div>
+    </a>
+  )
+}
