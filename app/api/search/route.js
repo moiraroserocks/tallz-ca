@@ -1,61 +1,121 @@
+// app/api/search/route.js
+
+const AMAZON_TAG = 'tallzcanada-20'
+
+function amazonLink(asin) {
+  return `https://www.amazon.ca/dp/${asin}?tag=${AMAZON_TAG}`
+}
+
+function norm(v) {
+  return (v || '').toString().trim().toLowerCase()
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
-  const category = searchParams.get('category')
-  const q = (searchParams.get('q') || '').toLowerCase()
 
-  // Replace these with real feeds later
+  const category = norm(searchParams.get('category') || 'all')
+  const q = norm(searchParams.get('q') || '')
+
+  // Demo catalog (replace with real products as you build your database)
   const products = [
-   {
-  id: 'amazon-tall-tunic-001',
-  title: 'Women’s Tall Tunic Top',
-  brand: 'Amazon',
-  category: 'tops',
-  image: 'https://m.media-amazon.com/images/I/...',
-  url: 'https://www.amazon.ca/dp/B0XXXXXXX?tag=tallzcanada-20',
-  source: 'amazon'
-},
+    // --- Amazon examples (affiliate tagged) ---
     {
-      id: 'oldnavy-tall-legging-001',
-      title: 'Tall Active Leggings',
-      brand: 'Old Navy',
-      category: 'workout',
-      price: 39,
+      id: 'amz-tall-tunic-001',
+      title: "Women's Tunic Top (Tall-friendly style)",
+      brand: 'Amazon',
+      store: 'Amazon.ca',
+      category: 'tops',
+      price: 39.99,
       tall: true,
-      image: 'https://dummyimage.com/700x875/e5e7eb/111827&text=Tall+Leggings',
-      url: 'https://oldnavy.gapcanada.ca'
+      image:
+        'https://dummyimage.com/700x875/e5e7eb/111827&text=Amazon+Tunic+Top',
+      // Replace the ASIN with a real one when you choose products
+      url: amazonLink('B0XXXXXXX'),
+      source: 'amazon',
+    },
+    {
+      id: 'amz-tall-leggings-001',
+      title: "Women's Active Leggings (Long length)",
+      brand: 'Amazon',
+      store: 'Amazon.ca',
+      category: 'workout',
+      price: 29.99,
+      tall: true,
+      image:
+        'https://dummyimage.com/700x875/e5e7eb/111827&text=Amazon+Tall+Leggings',
+      url: amazonLink('B0YYYYYYY'),
+      source: 'amazon',
+    },
+
+    // --- Non-Amazon placeholders (until you have affiliate links) ---
+    {
+      id: 'gap-tall-top-001',
+      title: 'Tall Tunic Top',
+      brand: 'Gap',
+      store: 'Gap Canada',
+      category: 'tops',
+      price: 54.0,
+      tall: true,
+      image: 'https://dummyimage.com/700x875/e5e7eb/111827&text=Gap+Tall+Top',
+      url: 'https://www.gapcanada.ca/',
+      source: 'retailer',
+    },
+    {
+      id: 'oldnavy-tall-bottom-001',
+      title: 'Tall Straight Jeans',
+      brand: 'Old Navy',
+      store: 'Old Navy Canada',
+      category: 'bottoms',
+      price: 59.0,
+      tall: true,
+      image:
+        'https://dummyimage.com/700x875/e5e7eb/111827&text=Old+Navy+Tall+Jeans',
+      url: 'https://oldnavy.gapcanada.ca/',
+      source: 'retailer',
     },
     {
       id: 'lts-dress-001',
       title: 'Tall Maxi Dress',
       brand: 'Long Tall Sally',
+      store: 'Long Tall Sally',
       category: 'dresses',
-      price: 119,
+      price: 119.0,
       tall: true,
-      image: 'https://dummyimage.com/700x875/e5e7eb/111827&text=Tall+Maxi+Dress',
-      url: 'https://www.longtallsally.com'
+      image:
+        'https://dummyimage.com/700x875/e5e7eb/111827&text=Tall+Maxi+Dress',
+      url: 'https://www.longtallsally.com/',
+      source: 'retailer',
     },
     {
       id: 'outdoor-shell-001',
-      title: 'Tall Outdoor Shell Jacket',
+      title: 'Outdoor Shell Jacket (Long length)',
       brand: 'Outdoor Brand',
+      store: 'Outdoor Brand',
       category: 'outdoors',
-      price: 149,
+      price: 149.0,
       tall: true,
-      image: 'https://dummyimage.com/700x875/e5e7eb/111827&text=Shell+Jacket',
-      url: 'https://example.com'
-    }
+      image:
+        'https://dummyimage.com/700x875/e5e7eb/111827&text=Shell+Jacket',
+      url: 'https://example.com/',
+      source: 'retailer',
+    },
   ]
 
   let filtered = products
 
+  // Category filter
   if (category && category !== 'all') {
-    filtered = filtered.filter((p) => p.category === category)
+    filtered = filtered.filter((p) => norm(p.category) === category)
   }
 
+  // Keyword filter (search in title, brand, store, category)
   if (q) {
-    filtered = filtered.filter((p) =>
-      (p.title || '').toLowerCase().includes(q)
-    )
+    filtered = filtered.filter((p) => {
+      const haystack = [p.title, p.brand, p.store, p.category, p.source]
+        .map(norm)
+        .join(' ')
+      return haystack.includes(q)
+    })
   }
 
   return Response.json(filtered)
