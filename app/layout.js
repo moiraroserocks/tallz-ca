@@ -1,19 +1,19 @@
 import './globals.css'
 import SiteHeader from '../components/SiteHeader'
-import Footer from '../components/Footer'
+import SiteFooter from '../components/SiteFooter'
 
 export const metadata = {
-  title: 'Tallz.ca — Tall women clothing in Canada',
-  description: 'Find tall-friendly clothing for women that ships to Canada.',
+  title: 'Tallz.ca — Tall-friendly clothing in Canada',
+  description: 'Find tall-friendly clothing that ships to Canada.'
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-white text-gray-900 min-h-screen flex flex-col">
+      <body className="min-h-screen bg-white text-neutral-950">
         <SiteHeader />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        {children}
+        <SiteFooter />
       </body>
     </html>
   )
