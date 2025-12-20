@@ -5,16 +5,15 @@ export async function GET(request) {
 
   // Replace these with real feeds later
   const products = [
-    {
-      id: 'gap-tall-tunic-001',
-      title: 'Tall Tunic Top',
-      brand: 'Gap',
-      category: 'tops',
-      price: 54,
-      tall: true,
-      image: 'https://dummyimage.com/700x875/e5e7eb/111827&text=Tall+Tunic+Top',
-      url: 'https://www.gapcanada.ca'
-    },
+   {
+  id: 'amazon-tall-tunic-001',
+  title: 'Women’s Tall Tunic Top',
+  brand: 'Amazon',
+  category: 'tops',
+  image: 'https://m.media-amazon.com/images/I/...',
+  url: 'https://www.amazon.ca/dp/B0XXXXXXX?tag=tallzcanada-20',
+  source: 'amazon'
+},
     {
       id: 'oldnavy-tall-legging-001',
       title: 'Tall Active Leggings',
