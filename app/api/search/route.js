@@ -16,23 +16,18 @@ export async function GET(request) {
   const category = norm(searchParams.get('category') || 'all')
   const q = norm(searchParams.get('q') || '')
 
-  // Demo catalog (replace with real products as you build your database)
-  const products = [
-    // --- Amazon examples (affiliate tagged) ---
-    {
-      id: 'amz-tall-tunic-001',
-      title: "Women's Tunic Top (Tall-friendly style)",
-      brand: 'Amazon',
-      store: 'Amazon.ca',
-      category: 'tops',
-      price: 39.99,
-      tall: true,
-      image:
-        'https://dummyimage.com/700x875/e5e7eb/111827&text=Amazon+Tunic+Top',
-      // Replace the ASIN with a real one when you choose products
-      url: amazonLink('B0XXXXXXX'),
-      source: 'amazon',
-    },
+  {
+  id: 'amz-lee-bootcut-001',
+  title: "Lee Women's Regular Fit Bootcut Jeans",
+  brand: 'Lee',
+  store: 'Amazon.ca',
+  category: 'bottoms',
+  tall: true,
+  image: 'https://m.media-amazon.com/images/I/B07B6GMPHC._AC_UL320_.jpg',
+  url: 'https://www.amazon.ca/dp/B07B6GMPHC?tag=tallzcanada-20',
+  source: 'amazon'
+},
+
     {
       id: 'amz-tall-leggings-001',
       title: "Women's Active Leggings (Long length)",
