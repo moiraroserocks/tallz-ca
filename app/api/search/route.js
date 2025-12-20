@@ -2,12 +2,18 @@
 
 const AMAZON_TAG = 'tallzcanada-20'
 
-function amazonLink(asin) {
-  return `https://www.amazon.ca/dp/${asin}?tag=${AMAZON_TAG}`
-}
-
 function norm(v) {
   return (v || '').toString().trim().toLowerCase()
+}
+
+function placeholderImage(label) {
+  const text = encodeURIComponent(label)
+  return `https://dummyimage.com/700x875/e5e7eb/111827&text=${text}`
+}
+
+function amazonCanonical(asin) {
+  // Clean, stable, tagged affiliate link
+  return `https://www.amazon.ca/dp/${asin}?tag=${AMAZON_TAG}`
 }
 
 export async function GET(request) {
@@ -16,83 +22,122 @@ export async function GET(request) {
   const category = norm(searchParams.get('category') || 'all')
   const q = norm(searchParams.get('q') || '')
 
-  {
-  id: 'amz-lee-bootcut-001',
-  title: "Lee Women's Regular Fit Bootcut Jeans",
-  brand: 'Lee',
-  store: 'Amazon.ca',
-  category: 'bottoms',
-  tall: true,
-  image: 'https://m.media-amazon.com/images/I/B07B6GMPHC._AC_UL320_.jpg',
-  url: 'https://www.amazon.ca/dp/B07B6GMPHC?tag=tallzcanada-20',
-  source: 'amazon'
-},
-
+  // ✅ Products from your provided links
+  // Notes:
+  // - Images are placeholders (PA-API will let us fetch real image/title later).
+  // - Categories: Lee jeans are "bottoms". Unknown ASIN-only items are "uncategorized"
+  //   so they show on All until you confirm what they are.
+  const products = [
+    // Lee jeans (from full URLs with /dp/ASIN)
     {
-      id: 'amz-tall-leggings-001',
-      title: "Women's Active Leggings (Long length)",
-      brand: 'Amazon',
+      id: 'amz-B07B6GMPHC',
+      asin: 'B07B6GMPHC',
+      title: "Lee Women's Regular Fit Bootcut Jeans",
+      brand: 'Lee',
       store: 'Amazon.ca',
-      category: 'workout',
-      price: 29.99,
+      category: 'bottoms',
       tall: true,
-      image:
-        'https://dummyimage.com/700x875/e5e7eb/111827&text=Amazon+Tall+Leggings',
-      url: amazonLink('B0YYYYYYY'),
+      image: placeholderImage('Lee Bootcut Jeans (B07B6GMPHC)'),
+      url: amazonCanonical('B07B6GMPHC'),
+      source: 'amazon',
+    },
+    {
+      id: 'amz-B0C7MYYS76',
+      asin: 'B0C7MYYS76',
+      title: "Lee Women's Legendary Bootcut Jeans",
+      brand: 'Lee',
+      store: 'Amazon.ca',
+      category: 'bottoms',
+      tall: true,
+      image: placeholderImage('Lee Legendary Bootcut (B0C7MYYS76)'),
+      url: amazonCanonical('B0C7MYYS76'),
+      source: 'amazon',
+    },
+    {
+      id: 'amz-B01EOX2G8C',
+      asin: 'B01EOX2G8C',
+      title: "Lee Women's Modern Bootcut Jeans",
+      brand: 'Lee',
+      store: 'Amazon.ca',
+      category: 'bottoms',
+      tall: true,
+      image: placeholderImage('Lee Modern Bootcut (B01EOX2G8C)'),
+      url: amazonCanonical('B01EOX2G8C'),
+      source: 'amazon',
+    },
+    {
+      id: 'amz-B07CSM971H',
+      asin: 'B07CSM971H',
+      title: "Lee Women's Secretly Shapes Straight Leg Jeans",
+      brand: 'Lee',
+      store: 'Amazon.ca',
+      category: 'bottoms',
+      tall: true,
+      image: placeholderImage('Lee Straight Leg (B07CSM971H)'),
+      url: amazonCanonical('B07CSM971H'),
       source: 'amazon',
     },
 
-    // --- Non-Amazon placeholders (until you have affiliate links) ---
+    // ASIN-only URLs (we can’t safely infer product type without PA-API)
     {
-      id: 'gap-tall-top-001',
-      title: 'Tall Tunic Top',
-      brand: 'Gap',
-      store: 'Gap Canada',
-      category: 'tops',
-      price: 54.0,
+      id: 'amz-B0FS7M9NZ1',
+      asin: 'B0FS7M9NZ1',
+      title: 'Amazon Item (B0FS7M9NZ1)',
+      brand: 'Amazon',
+      store: 'Amazon.ca',
+      category: 'uncategorized',
       tall: true,
-      image: 'https://dummyimage.com/700x875/e5e7eb/111827&text=Gap+Tall+Top',
-      url: 'https://www.gapcanada.ca/',
-      source: 'retailer',
+      image: placeholderImage('Amazon Item B0FS7M9NZ1'),
+      url: amazonCanonical('B0FS7M9NZ1'),
+      source: 'amazon',
     },
     {
-      id: 'oldnavy-tall-bottom-001',
-      title: 'Tall Straight Jeans',
-      brand: 'Old Navy',
-      store: 'Old Navy Canada',
-      category: 'bottoms',
-      price: 59.0,
+      id: 'amz-B0CRRG5D25',
+      asin: 'B0CRRG5D25',
+      title: 'Amazon Item (B0CRRG5D25)',
+      brand: 'Amazon',
+      store: 'Amazon.ca',
+      category: 'uncategorized',
       tall: true,
-      image:
-        'https://dummyimage.com/700x875/e5e7eb/111827&text=Old+Navy+Tall+Jeans',
-      url: 'https://oldnavy.gapcanada.ca/',
-      source: 'retailer',
+      image: placeholderImage('Amazon Item B0CRRG5D25'),
+      url: amazonCanonical('B0CRRG5D25'),
+      source: 'amazon',
     },
     {
-      id: 'lts-dress-001',
-      title: 'Tall Maxi Dress',
-      brand: 'Long Tall Sally',
-      store: 'Long Tall Sally',
-      category: 'dresses',
-      price: 119.0,
+      id: 'amz-B0CY541HCX',
+      asin: 'B0CY541HCX',
+      title: 'Amazon Item (B0CY541HCX)',
+      brand: 'Amazon',
+      store: 'Amazon.ca',
+      category: 'uncategorized',
       tall: true,
-      image:
-        'https://dummyimage.com/700x875/e5e7eb/111827&text=Tall+Maxi+Dress',
-      url: 'https://www.longtallsally.com/',
-      source: 'retailer',
+      image: placeholderImage('Amazon Item B0CY541HCX'),
+      url: amazonCanonical('B0CY541HCX'),
+      source: 'amazon',
     },
     {
-      id: 'outdoor-shell-001',
-      title: 'Outdoor Shell Jacket (Long length)',
-      brand: 'Outdoor Brand',
-      store: 'Outdoor Brand',
-      category: 'outdoors',
-      price: 149.0,
+      id: 'amz-B0CJXV6N9Q',
+      asin: 'B0CJXV6N9Q',
+      title: 'Amazon Item (B0CJXV6N9Q)',
+      brand: 'Amazon',
+      store: 'Amazon.ca',
+      category: 'uncategorized',
       tall: true,
-      image:
-        'https://dummyimage.com/700x875/e5e7eb/111827&text=Shell+Jacket',
-      url: 'https://example.com/',
-      source: 'retailer',
+      image: placeholderImage('Amazon Item B0CJXV6N9Q'),
+      url: amazonCanonical('B0CJXV6N9Q'),
+      source: 'amazon',
+    },
+    {
+      id: 'amz-B0CSMP6W73',
+      asin: 'B0CSMP6W73',
+      title: 'Amazon Item (B0CSMP6W73)',
+      brand: 'Amazon',
+      store: 'Amazon.ca',
+      category: 'uncategorized',
+      tall: true,
+      image: placeholderImage('Amazon Item B0CSMP6W73'),
+      url: amazonCanonical('B0CSMP6W73'),
+      source: 'amazon',
     },
   ]
 
@@ -103,10 +148,10 @@ export async function GET(request) {
     filtered = filtered.filter((p) => norm(p.category) === category)
   }
 
-  // Keyword filter (search in title, brand, store, category)
+  // Keyword filter (title/brand/store/category/asin)
   if (q) {
     filtered = filtered.filter((p) => {
-      const haystack = [p.title, p.brand, p.store, p.category, p.source]
+      const haystack = [p.title, p.brand, p.store, p.category, p.asin, p.source]
         .map(norm)
         .join(' ')
       return haystack.includes(q)
