@@ -2,26 +2,46 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import ProductCard from '../components/ProductCard'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function Home() {
+const COLLECTIONS = [
+  { label: 'All', value: 'all' },
+  { label: 'Tops', value: 'tops' },
+  { label: 'Bottoms', value: 'bottoms' },
+  { label: 'Dresses', value: 'dresses' },
+  { label: 'Workout', value: 'workout' },
+  { label: 'Outdoors', value: 'outdoors' }
+]
+
+export default function HomePage() {
+  const router = useRouter()
+  const params = useSearchParams()
+
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const [category, setCategory] = useState('all')
-  const [query, setQuery] = useState('')
+  const category = params.get('category') || 'all'
+  const q = params.get('q') || ''
+
+  function setParam(next) {
+    const sp = new URLSearchParams(params.toString())
+    Object.entries(next).forEach(([k, v]) => {
+      if (!v || v === 'all') sp.delete(k)
+      else sp.set(k, v)
+    })
+    const qs = sp.toString()
+    router.push(qs ? `/?${qs}` : '/')
+  }
 
   useEffect(() => {
     async function load() {
       setLoading(true)
       try {
-        const params = new URLSearchParams()
-        if (category !== 'all') params.set('category', category)
-        if (query.trim()) params.set('q', query.trim())
+        const sp = new URLSearchParams()
+        if (category !== 'all') sp.set('category', category)
+        if (q.trim()) sp.set('q', q.trim())
 
-        const url = params.toString()
-          ? `/api/search?${params.toString()}`
-          : '/api/search'
-
+        const url = sp.toString() ? `/api/search?${sp.toString()}` : '/api/search'
         const res = await fetch(url)
         const data = await res.json()
         setProducts(Array.isArray(data) ? data : [])
@@ -32,73 +52,109 @@ export default function Home() {
         setLoading(false)
       }
     }
-
     load()
-  }, [category, query])
+  }, [category, q])
 
-  const visible = useMemo(() => {
-    let list = products
-    if (category !== 'all') list = list.filter(p => p.category === category)
-    if (query.trim()) {
-      const k = query.trim().toLowerCase()
-      list = list.filter(p => (p.title || '').toLowerCase().includes(k))
-    }
-    return list
-  }, [products, category, query])
+  const visible = useMemo(() => products, [products])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Tall-friendly clothing
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Search tall items that ship to Canada.
-          </p>
+    <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
+      {/* Hero */}
+      <section className="mb-10">
+        <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
+          Tall-friendly clothing
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm text-neutral-600 md:text-base">
+          A clean, searchable catalog of tall-friendly pieces that ship to Canada.
+        </p>
+
+        {/* Search row */}
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex-1">
+            <input
+              value={q}
+              onChange={(e) => setParam({ q: e.target.value })}
+              placeholder='Search (e.g., "tunic")'
+              className="w-full rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-neutral-400"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-neutral-500">Collection</span>
+            <select
+              value={category}
+              onChange={(e) => setParam({ category: e.target.value })}
+              className="rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-neutral-400"
+            >
+              {COLLECTIONS.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div className="flex gap-2 w-full md:w-auto">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder='Search (e.g., "tunic")'
-            className="w-full md:w-[320px] rounded-full border px-4 py-2 text-sm"
-          />
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="rounded-full border px-4 py-2 text-sm bg-white"
-          >
-            <option value="all">All</option>
-            <option value="tops">Tops</option>
-            <option value="bottoms">Bottoms</option>
-            <option value="dresses">Dresses</option>
-            <option value="workout">Workout</option>
-            <option value="outdoors">Outdoors</option>
-          </select>
+        {/* Collection pills (template vibe) */}
+        <div className="mt-5 flex flex-wrap gap-2">
+          {COLLECTIONS.map((c) => {
+            const active = (category || 'all') === c.value
+            return (
+              <button
+                key={c.value}
+                onClick={() => setParam({ category: c.value })}
+                className={`rounded-full border px-3 py-1.5 text-sm transition ${
+                  active
+                    ? 'border-neutral-900 bg-neutral-900 text-white'
+                    : 'border-neutral-200 bg-white text-neutral-900 hover:border-neutral-400'
+                }`}
+              >
+                {c.label}
+              </button>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* Results header */}
+      <div className="mb-5 flex items-center justify-between">
+        <div className="text-sm text-neutral-600">
+          {loading ? 'Loading…' : `Showing ${visible.length} items`}
         </div>
       </div>
 
+      {/* Grid */}
       {loading ? (
-        <p className="text-gray-600">Loading…</p>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="animate-pulse rounded-2xl border border-neutral-200"
+            >
+              <div className="aspect-[4/5] rounded-t-2xl bg-neutral-100" />
+              <div className="p-3">
+                <div className="h-3 w-24 rounded bg-neutral-100" />
+                <div className="mt-2 h-4 w-40 rounded bg-neutral-100" />
+                <div className="mt-3 h-3 w-16 rounded bg-neutral-100" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <>
-          <div className="text-sm text-gray-600 mb-4">
-            Showing <span className="font-medium">{visible.length}</span> items
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {visible.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
 
           {visible.length === 0 && (
-            <p className="text-gray-600 mt-8">No results.</p>
+            <div className="mt-10 rounded-2xl border border-neutral-200 p-6 text-sm text-neutral-600">
+              No results. Try another keyword or pick “All”.
+            </div>
           )}
         </>
       )}
-    </div>
+    </main>
   )
 }
