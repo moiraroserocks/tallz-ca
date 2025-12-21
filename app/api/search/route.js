@@ -6,15 +6,8 @@ function norm(v) {
   return (v || '').toString().trim().toLowerCase()
 }
 
-// Clean, stable, tagged affiliate link
 function amazonLink(asin) {
   return `https://www.amazon.ca/dp/${asin}?tag=${AMAZON_TAG}`
-}
-
-// Best-effort image URL without PA-API.
-// Works for some ASINs, but not all. We'll add a UI fallback if needed.
-function amazonImage(asin, size = 600) {
-  return `https://m.media-amazon.com/images/I/${asin}._AC_UL${size}_.jpg`
 }
 
 export async function GET(request) {
@@ -23,9 +16,7 @@ export async function GET(request) {
   const category = norm(searchParams.get('category') || 'all')
   const q = norm(searchParams.get('q') || '')
 
-  // ✅ Your products (deduped)
   const products = [
-    // Lee jeans (bottoms)
     {
       id: 'amz-B07B6GMPHC',
       asin: 'B07B6GMPHC',
@@ -34,7 +25,7 @@ export async function GET(request) {
       store: 'Amazon.ca',
       category: 'bottoms',
       tall: true,
-      image: amazonImage('B07B6GMPHC', 600),
+      image: 'https://m.media-amazon.com/images/I/61Fej2rPSwL._AC_SY445_SX342_QL70_ML2_.jpg',
       url: amazonLink('B07B6GMPHC'),
       source: 'amazon',
     },
@@ -46,7 +37,7 @@ export async function GET(request) {
       store: 'Amazon.ca',
       category: 'bottoms',
       tall: true,
-      image: amazonImage('B0C7MYYS76', 600),
+      image: 'https://m.media-amazon.com/images/I/61QopScXiwL._AC_SY550_.jpg',
       url: amazonLink('B0C7MYYS76'),
       source: 'amazon',
     },
@@ -58,7 +49,7 @@ export async function GET(request) {
       store: 'Amazon.ca',
       category: 'bottoms',
       tall: true,
-      image: amazonImage('B01EOX2G8C', 600),
+      image: 'https://m.media-amazon.com/images/I/81UkJtZLMvL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B01EOX2G8C'),
       source: 'amazon',
     },
@@ -70,69 +61,67 @@ export async function GET(request) {
       store: 'Amazon.ca',
       category: 'bottoms',
       tall: true,
-      image: amazonImage('B07CSM971H', 600),
+      image: 'https://m.media-amazon.com/images/I/710AvhgMtDL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B07CSM971H'),
       source: 'amazon',
     },
-
-    // ASIN-only links (category unknown until you confirm)
     {
       id: 'amz-B0FS7M9NZ1',
       asin: 'B0FS7M9NZ1',
-      title: 'Crewneck t-shirt',
+      title: 'Amazon Item (B0FS7M9NZ1)',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      category: 'uncategorized',
       tall: true,
-      image: amazonImage('B0FS7M9NZ1', 600),
+      image: 'https://m.media-amazon.com/images/I/61WUWYhoV3L._AC_SY550_.jpg',
       url: amazonLink('B0FS7M9NZ1'),
       source: 'amazon',
     },
     {
       id: 'amz-B0CRRG5D25',
       asin: 'B0CRRG5D25',
-      title: 'Button up round neck t-shirt',
+      title: 'Amazon Item (B0CRRG5D25)',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      category: 'uncategorized',
       tall: true,
-      image: amazonImage('B0CRRG5D25', 600),
+      image: 'https://m.media-amazon.com/images/I/61ShURNh2YL._AC_SY445_SX342_QL70_ML2_.jpg',
       url: amazonLink('B0CRRG5D25'),
       source: 'amazon',
     },
     {
       id: 'amz-B0CY541HCX',
       asin: 'B0CY541HCX',
-      title: 'Cotton Racerback Yoga Tops',
+      title: 'Amazon Item (B0CY541HCX)',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      category: 'uncategorized',
       tall: true,
-      image: amazonImage('B0CY541HCX', 600),
+      image: 'https://m.media-amazon.com/images/I/81tGYvEZaCL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B0CY541HCX'),
       source: 'amazon',
     },
     {
       id: 'amz-B0CJXV6N9Q',
       asin: 'B0CJXV6N9Q',
-      title: 'Linen short sleeve blouse',
+      title: 'Amazon Item (B0CJXV6N9Q)',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      category: 'uncategorized',
       tall: true,
-      image: amazonImage('B0CJXV6N9Q', 600),
+      image: 'https://m.media-amazon.com/images/I/7183tTld--L._AC_SX466_.jpg',
       url: amazonLink('B0CJXV6N9Q'),
       source: 'amazon',
     },
     {
       id: 'amz-B0CSMP6W73',
       asin: 'B0CSMP6W73',
-      title: 'Striped blouse',
+      title: 'Amazon Item (B0CSMP6W73)',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Top',
+      category: 'uncategorized',
       tall: true,
-      image: amazonImage('B0CSMP6W73', 600),
+      image: 'https://m.media-amazon.com/images/I/61aOjjSN36L._AC_SY679_.jpg',
       url: amazonLink('B0CSMP6W73'),
       source: 'amazon',
     },
@@ -140,12 +129,10 @@ export async function GET(request) {
 
   let filtered = products
 
-  // Category filter
   if (category && category !== 'all') {
     filtered = filtered.filter((p) => norm(p.category) === category)
   }
 
-  // Keyword filter (title/brand/store/category/asin)
   if (q) {
     filtered = filtered.filter((p) => {
       const haystack = [p.title, p.brand, p.store, p.category, p.asin, p.source]
