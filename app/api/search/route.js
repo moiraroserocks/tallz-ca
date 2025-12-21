@@ -25,7 +25,8 @@ export async function GET(request) {
       store: 'Amazon.ca',
       categories: ['bottoms'],
       tall: true,
-      image: 'https://m.media-amazon.com/images/I/61Fej2rPSwL._AC_SY445_SX342_QL70_ML2_.jpg',
+      image:
+        'https://m.media-amazon.com/images/I/61Fej2rPSwL._AC_SY445_SX342_QL70_ML2_.jpg',
       url: amazonLink('B07B6GMPHC'),
       source: 'amazon',
     },
@@ -49,7 +50,8 @@ export async function GET(request) {
       store: 'Amazon.ca',
       categories: ['bottoms'],
       tall: true,
-      image: 'https://m.media-amazon.com/images/I/81UkJtZLMvL._AC_SX342_SY445_QL70_ML2_.jpg',
+      image:
+        'https://m.media-amazon.com/images/I/81UkJtZLMvL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B01EOX2G8C'),
       source: 'amazon',
     },
@@ -61,10 +63,12 @@ export async function GET(request) {
       store: 'Amazon.ca',
       categories: ['bottoms'],
       tall: true,
-      image: 'https://m.media-amazon.com/images/I/710AvhgMtDL._AC_SX342_SY445_QL70_ML2_.jpg',
+      image:
+        'https://m.media-amazon.com/images/I/710AvhgMtDL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B07CSM971H'),
       source: 'amazon',
     },
+
     {
       id: 'amz-B0FS7M9NZ1',
       asin: 'B0FS7M9NZ1',
@@ -85,7 +89,8 @@ export async function GET(request) {
       store: 'Amazon.ca',
       categories: ['tops'],
       tall: true,
-      image: 'https://m.media-amazon.com/images/I/61ShURNh2YL._AC_SY445_SX342_QL70_ML2_.jpg',
+      image:
+        'https://m.media-amazon.com/images/I/61ShURNh2YL._AC_SY445_SX342_QL70_ML2_.jpg',
       url: amazonLink('B0CRRG5D25'),
       source: 'amazon',
     },
@@ -97,14 +102,15 @@ export async function GET(request) {
       store: 'Amazon.ca',
       categories: ['tops', 'workout'],
       tall: true,
-      image: 'https://m.media-amazon.com/images/I/81tGYvEZaCL._AC_SX342_SY445_QL70_ML2_.jpg',
+      image:
+        'https://m.media-amazon.com/images/I/81tGYvEZaCL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B0CY541HCX'),
       source: 'amazon',
     },
     {
       id: 'amz-B0CJXV6N9Q',
       asin: 'B0CJXV6N9Q',
-      title: 'Linen Short-Sleve Buttoned Shirt',
+      title: 'Linen Short-Sleeve Buttoned Shirt',
       brand: 'Amazon',
       store: 'Amazon.ca',
       categories: ['tops'],
@@ -140,7 +146,7 @@ export async function GET(request) {
     {
       id: 'amz-B0FCXTWGHR',
       asin: 'B0FCXTWGHR',
-      title: 'Crewneck Raglan Tunic With Thumbsholes',
+      title: 'Crewneck Raglan Tunic With Thumbholes',
       brand: 'Amazon',
       store: 'Amazon.ca',
       categories: ['tops'],
@@ -186,7 +192,7 @@ export async function GET(request) {
       source: 'amazon',
     },
     {
-      id: 'amz-B0BJDGZHKL',
+      id: 'amz-B0BJDGZHKL-pack',
       asin: 'B0BJDGZHKL',
       title: 'Tank Tops 3-Pack',
       brand: 'Amazon',
@@ -210,12 +216,13 @@ export async function GET(request) {
       source: 'amazon',
     },
     {
-      id: 'amz-B0BJDGZHKL',
+      // You had the same ASIN twice; keep it once with a unique id
+      id: 'amz-B0BJDGZHKL-stretch',
       asin: 'B0BJDGZHKL',
       title: 'Stretchy Tank Tops 3-Pack',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      categories: ['tops'],
+      categories: ['tops', 'workout'],
       tall: true,
       image: 'https://m.media-amazon.com/images/I/71RVqO23OPL._AC_SX679_.jpg',
       url: amazonLink('B0BJDGZHKL'),
@@ -237,13 +244,19 @@ export async function GET(request) {
 
   let filtered = products
 
+  // ✅ Category filter (supports multi-category items)
   if (category && category !== 'all') {
-    filtered = filtered.filter((p) => norm(p.category) === category)
+    filtered = filtered.filter((p) => {
+      const cats = Array.isArray(p.categories) ? p.categories.map(norm) : []
+      return cats.includes(category)
+    })
   }
 
+  // ✅ Keyword filter (search title/brand/store/categories/asin/source)
   if (q) {
     filtered = filtered.filter((p) => {
-      const haystack = [p.title, p.brand, p.store, p.category, p.asin, p.source]
+      const cats = Array.isArray(p.categories) ? p.categories.join(' ') : ''
+      const haystack = [p.title, p.brand, p.store, p.asin, p.source, cats]
         .map(norm)
         .join(' ')
       return haystack.includes(q)
