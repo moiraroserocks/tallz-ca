@@ -58,14 +58,14 @@ export default function ProductCard({ product }) {
       rel="noopener noreferrer"
       className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-neutral-300"
     >
-      <div className="aspect-[4/5] bg-neutral-50 overflow-hidden max-h-[220px]">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
-      </div>
+     <div className="bg-neutral-50 h-[170px] sm:h-[190px] flex items-center justify-center overflow-hidden">
+  <img
+    src={product.image}
+    alt={product.title}
+    className="max-h-full max-w-full object-contain"
+    loading="lazy"
+  />
+</div>
 
       <div className="p-3">
         <div className="text-xs text-neutral-500">
