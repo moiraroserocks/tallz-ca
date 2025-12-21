@@ -22,12 +22,13 @@ export default function SiteHeader() {
           <Link className="text-sm text-neutral-600 hover:text-neutral-900" href="/about">
             About
           </Link>
-          <Link
-            className="rounded-full border border-neutral-200 px-4 py-2 text-sm hover:border-neutral-400"
-            href="/about"
-          >
-            Work with us
-          </Link>
+        <a
+  className="rounded-full border border-neutral-200 px-4 py-2 text-sm hover:border-neutral-400"
+  href="mailto:tallz.ca@proton.me?subject=Tallz.ca%20Inquiry"
+>
+  Be in touch
+</a>
+
         </div>
       </div>
     </header>
