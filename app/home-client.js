@@ -83,9 +83,6 @@ export default function HomeClient() {
 
 
   return (
-    <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
-      {/* Hero */}
-    
 
         {/* Search + filter */}
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
