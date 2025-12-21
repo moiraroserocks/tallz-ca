@@ -85,13 +85,7 @@ export default function HomeClient() {
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
       {/* Hero */}
-      <section className="mb-10">
-        <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
-          Tall-friendly clothing
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm text-neutral-600 md:text-base">
-          A clean, searchable catalog of tall-friendly pieces that ship to Canada.
-        </p>
+    
 
         {/* Search + filter */}
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
