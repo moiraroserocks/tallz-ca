@@ -59,7 +59,28 @@ export default function HomeClient() {
     load()
   }, [category, q])
 
-  const visible = useMemo(() => products, [products])
+ const visible = useMemo(() => {
+  let list = products
+
+  if (category !== 'all') {
+    list = list.filter(
+      (p) => Array.isArray(p.categories) && p.categories.includes(category)
+    )
+  }
+
+  if (q.trim()) {
+    const k = q.trim().toLowerCase()
+    list = list.filter((p) =>
+      [p.title, p.brand, p.store, (p.categories || []).join(' '), p.asin]
+        .join(' ')
+        .toLowerCase()
+        .includes(k)
+    )
+  }
+
+  return list
+}, [products, category, q])
+
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
