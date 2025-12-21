@@ -137,9 +137,19 @@ export default function HomeClient() {
       </section>
 
       {/* Results */}
-      <div className="mb-5 text-sm text-neutral-600">
-        {loading ? 'Loading…' : `Showing ${visible.length} items`}
-      </div>
+     <div className="mb-5 text-sm text-neutral-600 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+  <div>
+    {loading ? 'Loading…' : `Showing ${visible.length} items`}
+  </div>
+
+  {!loading && (
+    <div className="text-neutral-500">
+      — we update our catalogue on a daily basis, help us grow it by
+      sending us links to your favorite tall-women fitting items.
+    </div>
+  )}
+</div>
+
 
       {loading ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
