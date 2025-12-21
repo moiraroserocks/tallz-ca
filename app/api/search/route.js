@@ -23,7 +23,7 @@ export async function GET(request) {
       title: "Lee Women's Regular Fit Bootcut Jeans",
       brand: 'Lee',
       store: 'Amazon.ca',
-      category: 'bottoms',
+      categories: ['bottoms']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/61Fej2rPSwL._AC_SY445_SX342_QL70_ML2_.jpg',
       url: amazonLink('B07B6GMPHC'),
@@ -35,7 +35,7 @@ export async function GET(request) {
       title: "Lee Women's Legendary Bootcut Jeans",
       brand: 'Lee',
       store: 'Amazon.ca',
-      category: 'bottoms',
+      categories: ['bottoms']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/61QopScXiwL._AC_SY550_.jpg',
       url: amazonLink('B0C7MYYS76'),
@@ -47,7 +47,7 @@ export async function GET(request) {
       title: "Lee Women's Modern Bootcut Jeans",
       brand: 'Lee',
       store: 'Amazon.ca',
-      category: 'bottoms',
+      categories: ['bottoms']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/81UkJtZLMvL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B01EOX2G8C'),
@@ -59,7 +59,7 @@ export async function GET(request) {
       title: "Lee Women's Secretly Shapes Straight Leg Jeans",
       brand: 'Lee',
       store: 'Amazon.ca',
-      category: 'bottoms',
+      categories: ['bottoms']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/710AvhgMtDL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B07CSM971H'),
@@ -71,7 +71,7 @@ export async function GET(request) {
       title: 'Crew Neck T-Shirt',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'uncategorized',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/61WUWYhoV3L._AC_SY550_.jpg',
       url: amazonLink('B0FS7M9NZ1'),
@@ -83,7 +83,7 @@ export async function GET(request) {
       title: 'Round Neck Buttoned T-Shirt',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'uncategorized',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/61ShURNh2YL._AC_SY445_SX342_QL70_ML2_.jpg',
       url: amazonLink('B0CRRG5D25'),
@@ -95,7 +95,7 @@ export async function GET(request) {
       title: 'Racerback Tops',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'uncategorized',
+      categories: ['tops', 'workout']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/81tGYvEZaCL._AC_SX342_SY445_QL70_ML2_.jpg',
       url: amazonLink('B0CY541HCX'),
@@ -107,7 +107,7 @@ export async function GET(request) {
       title: 'Linen Short-Sleve Buttoned Shirt',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'uncategorized',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/7183tTld--L._AC_SX466_.jpg',
       url: amazonLink('B0CJXV6N9Q'),
@@ -119,7 +119,7 @@ export async function GET(request) {
       title: 'Striped Buttoned Shirt',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'uncategorized',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/61aOjjSN36L._AC_SY679_.jpg',
       url: amazonLink('B0CSMP6W73'),
@@ -131,7 +131,7 @@ export async function GET(request) {
       title: 'Lightweight V-Neck Tunic',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/81A1QQNPjkL._AC_SX569_.jpg',
       url: amazonLink('B07F23Y859'),
@@ -143,7 +143,7 @@ export async function GET(request) {
       title: 'Crewneck Raglan Tunic With Thumbsholes',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/71M2vcN6JPL._AC_SY741_.jpg',
       url: amazonLink('B0FCXTWGHR'),
@@ -155,7 +155,7 @@ export async function GET(request) {
       title: 'Crewneck Pockets Tunic',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/715Q2OlaN9L._AC_SY606_.jpg',
       url: amazonLink('B0CF5DD9J6'),
@@ -167,7 +167,7 @@ export async function GET(request) {
       title: 'Crewneck Soft Sweatshirt',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/71eyp8Hz3jL._AC_SY500_.jpg',
       url: amazonLink('B0BKXPLB26'),
@@ -179,7 +179,7 @@ export async function GET(request) {
       title: 'V-Neck Sweater',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/71WlbIGW4cL._AC_SY741_.jpg',
       url: amazonLink('B0FVLWZ5PK'),
@@ -191,7 +191,7 @@ export async function GET(request) {
       title: 'Tank Tops 3-Pack',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops', 'workout']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/71PkY9YrOjL._AC_SX679_.jpg',
       url: amazonLink('B0BJDGZHKL'),
@@ -203,7 +203,7 @@ export async function GET(request) {
       title: 'Crewneck Sweatshirt',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/81G6sI-BmlL._AC_SX569_.jpg',
       url: amazonLink('B0B49HSW16'),
@@ -215,7 +215,7 @@ export async function GET(request) {
       title: 'Stretchy Tank Tops 3-Pack',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/71RVqO23OPL._AC_SX679_.jpg',
       url: amazonLink('B0BJDGZHKL'),
@@ -227,7 +227,7 @@ export async function GET(request) {
       title: 'Swing V-Neck Tunic 3/4 Sleeves',
       brand: 'Amazon',
       store: 'Amazon.ca',
-      category: 'Tops',
+      categories: ['tops']
       tall: true,
       image: 'https://m.media-amazon.com/images/I/71KzCK5mjVL._AC_SY741_.jpg',
       url: amazonLink('B0D629H73T'),
