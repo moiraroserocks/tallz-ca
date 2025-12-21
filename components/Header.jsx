@@ -98,12 +98,12 @@ export default function Header() {
 
           {/* Right: actions */}
           <div className="flex items-center gap-2">
-            <Link
-              href="/about"
-              className="hidden sm:inline-flex text-sm font-medium px-4 py-2 rounded-full border hover:bg-gray-50"
-            >
-              Work with us
-            </Link>
+            <a
+  href="mailto:tallz.ca@proton.me?subject=Tallz.ca%20Inquiry"
+  className="hidden sm:inline-flex text-sm font-medium px-4 py-2 rounded-full border hover:bg-gray-50"
+>
+  Be in touch
+</a>
 
             {/* Mobile menu button */}
             <button
