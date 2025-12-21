@@ -10,7 +10,7 @@ export default function SiteFooter() {
               Tallz<span className="text-neutral-400">.ca</span>
             </div>
             <p className="mt-2 max-w-md text-sm text-neutral-600">
-              Tallz.ca earns commissions from qualifying purchases. We don’t sell products—retailers do. Tallz.ca is an Amazon Associate.
+              Tallz.ca earns commissions from qualifying purchases. We don’t sell products—retailers do. As an Amazon Associate, we earn from qualifying purchases.
             </p>
           </div>
 
