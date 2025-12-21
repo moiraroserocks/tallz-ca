@@ -5,9 +5,14 @@ export default function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-sm font-semibold tracking-tight">
-            Tallz<span className="text-neutral-400">.ca  A clean, searchable catalog of tall-friendly pieces that ship to Canada.</span>
-          </Link>
+       <Link href="/" className="flex flex-col leading-tight">
+  <span className="text-lg font-semibold tracking-tight">
+    Tall-friendly clothing
+  </span>
+  <span className="text-xs text-neutral-600">
+    A clean, searchable catalog of tall-friendly pieces that ship to Canada.
+  </span>
+</Link>
         </div>
 
         <div className="flex items-center gap-3">
