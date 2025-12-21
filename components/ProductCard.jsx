@@ -58,11 +58,11 @@ export default function ProductCard({ product }) {
       rel="noopener noreferrer"
       className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-neutral-300"
     >
-      <div className="aspect-[4/5] bg-neutral-50 overflow-hidden">
+      <div className="aspect-[4/5] bg-neutral-50 overflow-hidden max-h-[220px]">
         <img
           src={product.image}
           alt={product.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          className="h-full w-full object-cover"
           loading="lazy"
         />
       </div>
@@ -80,7 +80,7 @@ export default function ProductCard({ product }) {
         <div className="mt-2">
           <Stars value={rating} onChange={updateRating} />
           <div className="mt-1 text-[11px] text-neutral-500">
-            {rating ? `You rated: ${rating}/5` : 'Rate this item'}
+            {rating ? `You rated: ${rating}/5` : 'Tallz customer ratings'}
           </div>
         </div>
 
