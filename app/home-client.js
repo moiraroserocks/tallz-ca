@@ -41,9 +41,7 @@ export default function HomeClient() {
         if (category !== 'all') sp.set('category', category)
         if (q.trim()) sp.set('q', q.trim())
 
-        const url = sp.toString()
-          ? `/api/search?${sp.toString()}`
-          : '/api/search'
+        const url = sp.toString() ? `/api/search?${sp.toString()}` : '/api/search'
 
         const res = await fetch(url)
         const data = await res.json()
@@ -59,33 +57,33 @@ export default function HomeClient() {
     load()
   }, [category, q])
 
- const visible = useMemo(() => {
-  let list = products
+  const visible = useMemo(() => {
+    let list = products
 
-  if (category !== 'all') {
-    list = list.filter(
-      (p) => Array.isArray(p.categories) && p.categories.includes(category)
-    )
-  }
+    if (category !== 'all') {
+      list = list.filter(
+        (p) => Array.isArray(p.categories) && p.categories.includes(category)
+      )
+    }
 
-  if (q.trim()) {
-    const k = q.trim().toLowerCase()
-    list = list.filter((p) =>
-      [p.title, p.brand, p.store, (p.categories || []).join(' '), p.asin]
-        .join(' ')
-        .toLowerCase()
-        .includes(k)
-    )
-  }
+    if (q.trim()) {
+      const k = q.trim().toLowerCase()
+      list = list.filter((p) =>
+        [p.title, p.brand, p.store, (p.categories || []).join(' '), p.asin]
+          .join(' ')
+          .toLowerCase()
+          .includes(k)
+      )
+    }
 
-  return list
-}, [products, category, q])
-
+    return list
+  }, [products, category, q])
 
   return (
-
+    <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
+      <section className="mb-10">
         {/* Search + filter */}
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
             value={q}
             onChange={(e) => setParam({ q: e.target.value })}
@@ -127,21 +125,19 @@ export default function HomeClient() {
         </div>
       </section>
 
+      {/* Results header */}
+      <div className="mb-5 text-sm text-neutral-600 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+        <div>{loading ? 'Loading…' : `Showing ${visible.length} items`}</div>
+
+        {!loading && (
+          <div className="text-neutral-500">
+            — we&apos;re updating our catalogue on a daily basis, help us grow it
+            by sending us links to your favorite tall-women friendly items.
+          </div>
+        )}
+      </div>
+
       {/* Results */}
-     <div className="mb-5 text-sm text-neutral-600 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
-  <div>
-    {loading ? 'Loading…' : `Showing ${visible.length} items`}
-  </div>
-
-  {!loading && (
-    <div className="text-neutral-500">
-      — we update our catalogue on a daily basis, help us grow it by
-      sending us links to your favorite tall-women fitting items.
-    </div>
-  )}
-</div>
-
-
       {loading ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
