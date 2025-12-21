@@ -80,7 +80,7 @@ export default function ProductCard({ product }) {
         <div className="mt-2">
           <Stars value={rating} onChange={updateRating} />
           <div className="mt-1 text-[11px] text-neutral-500">
-            {rating ? `You rated: ${rating}/5` : 'Tallz customer ratings'}
+            {rating ? `Tallz customer ratings: ${rating}/5` : 'Tallz customer ratings'}
           </div>
         </div>
 
