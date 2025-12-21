@@ -6,16 +6,8 @@ export default function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="text-sm font-semibold tracking-tight">
-            Tallz<span className="text-neutral-400">.ca</span>
+            Tallz<span className="text-neutral-400">.ca  A clean, searchable catalog of tall-friendly pieces that ship to Canada.</span>
           </Link>
-
-          <nav className="hidden items-center gap-4 md:flex">
-            <Link className="text-sm text-neutral-600 hover:text-neutral-900" href="/?category=tops">Tops</Link>
-            <Link className="text-sm text-neutral-600 hover:text-neutral-900" href="/?category=bottoms">Bottoms</Link>
-            <Link className="text-sm text-neutral-600 hover:text-neutral-900" href="/?category=dresses">Dresses</Link>
-            <Link className="text-sm text-neutral-600 hover:text-neutral-900" href="/?category=workout">Workout</Link>
-            <Link className="text-sm text-neutral-600 hover:text-neutral-900" href="/?category=outdoors">Outdoors</Link>
-          </nav>
         </div>
 
         <div className="flex items-center gap-3">
