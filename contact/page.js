@@ -16,7 +16,7 @@ export default function ContactPage() {
       </p>
 
       <form
-        action="https://formspree.io/f/XXXXXXX"
+        action="https://formspree.io/f/mlgrkvdq"
         method="POST"
         className="mt-8 space-y-4"
       >
