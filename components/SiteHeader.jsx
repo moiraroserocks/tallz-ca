@@ -16,7 +16,7 @@ export default function SiteHeader() {
             className="h-8 w-auto"
           />
 
-          <span className="hidden sm:block text-xs text-neutral-500 tracking-tight relative top-[-3px]">
+          <span className="hidden sm:block text-xs text-neutral-500 tracking-tight relative top-[-6px]">
             tailored finds for tall frames
           </span>
         </Link>
