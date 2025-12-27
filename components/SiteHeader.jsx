@@ -6,16 +6,19 @@ export default function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
 
         {/* LEFT: logo + brand text */}
-        <Link href="/" className="flex items-center gap-3">
+        <Link
+          href="/"
+          className="flex items-baseline gap-3"
+        >
           <img
             src="/logo.png"
             alt="Tallz logo"
             className="h-8 w-auto"
           />
 
-          <div className="hidden sm:block text-xs text-neutral-500 tracking-tight">
-            curated clothes for tall people
-          </div>
+          <span className="hidden sm:block text-xs text-neutral-500 tracking-tight relative top-[1px]">
+            tailored finds for tall frames
+          </span>
         </Link>
 
         {/* RIGHT */}
