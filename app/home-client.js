@@ -27,8 +27,8 @@ export default function HomeClient() {
   const [loading, setLoading] = useState(true)
 
   const category = searchParams.get("category") || "all"
-  const q = searchParams.get("q") || ""
   const gender = searchParams.get("gender") || "all"
+  const q = searchParams.get("q") || ""
 
   function setParam(next) {
     const sp = new URLSearchParams(searchParams.toString())
@@ -62,9 +62,9 @@ export default function HomeClient() {
     }
 
     load()
-  }, [category, q, gender])
+  }, [category, gender, q])
 
-  // API already filters; this keeps things safe if you later change API behavior.
+  // Safety filter (optional, keeps UI consistent even if API changes later)
   const visible = useMemo(() => {
     let list = products
 
@@ -90,7 +90,7 @@ export default function HomeClient() {
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
       <section className="mb-10">
-        {/* Search + filters */}
+        {/* Search */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
             value={q}
@@ -98,39 +98,16 @@ export default function HomeClient() {
             placeholder='Search (e.g., "tunic")'
             className="w-full rounded-full border px-4 py-2.5 text-sm"
           />
-
-          <select
-            value={category}
-            onChange={(e) => setParam({ category: e.target.value })}
-            className="rounded-full border px-4 py-2.5 text-sm"
-          >
-            {COLLECTIONS.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={gender}
-            onChange={(e) => setParam({ gender: e.target.value })}
-            className="rounded-full border px-4 py-2.5 text-sm"
-          >
-            {GENDERS.map((g) => (
-              <option key={g.value} value={g.value}>
-                {g.label}
-              </option>
-            ))}
-          </select>
         </div>
 
-        {/* Collection pills */}
+        {/* Category pills */}
         <div className="mt-5 flex flex-wrap gap-2">
           {COLLECTIONS.map((c) => {
             const active = category === c.value
             return (
               <button
                 key={c.value}
+                type="button"
                 onClick={() => setParam({ category: c.value })}
                 className={`rounded-full border px-3 py-1.5 text-sm transition ${
                   active
@@ -139,6 +116,27 @@ export default function HomeClient() {
                 }`}
               >
                 {c.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Gender pills (NEW) */}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {GENDERS.map((g) => {
+            const active = gender === g.value
+            return (
+              <button
+                key={g.value}
+                type="button"
+                onClick={() => setParam({ gender: g.value })}
+                className={`rounded-full border px-3 py-1.5 text-sm transition ${
+                  active
+                    ? "border-neutral-900 bg-neutral-900 text-white"
+                    : "border-neutral-200 hover:border-neutral-400"
+                }`}
+              >
+                {g.label}
               </button>
             )
           })}
