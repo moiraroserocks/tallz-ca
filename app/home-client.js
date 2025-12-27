@@ -1,16 +1,22 @@
-'use client'
+"use client"
 
-import { useEffect, useMemo, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import ProductCard from '../components/ProductCard'
+import { useEffect, useMemo, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import ProductCard from "../components/ProductCard"
 
 const COLLECTIONS = [
-  { label: 'All', value: 'all' },
-  { label: 'Tops', value: 'tops' },
-  { label: 'Bottoms', value: 'bottoms' },
-  { label: 'Dresses', value: 'dresses' },
-  { label: 'Workout', value: 'workout' },
-  { label: 'Outdoors', value: 'outdoors' },
+  { label: "All", value: "all" },
+  { label: "Tops", value: "tops" },
+  { label: "Bottoms", value: "bottoms" },
+  { label: "Dresses", value: "dresses" },
+  { label: "Workout", value: "workout" },
+  { label: "Outdoors", value: "outdoors" },
+]
+
+const GENDERS = [
+  { label: "Everyone", value: "all" },
+  { label: "Women", value: "women" },
+  { label: "Men", value: "men" },
 ]
 
 export default function HomeClient() {
@@ -20,17 +26,18 @@ export default function HomeClient() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const category = searchParams.get('category') || 'all'
-  const q = searchParams.get('q') || ''
+  const category = searchParams.get("category") || "all"
+  const q = searchParams.get("q") || ""
+  const gender = searchParams.get("gender") || "all"
 
   function setParam(next) {
     const sp = new URLSearchParams(searchParams.toString())
     Object.entries(next).forEach(([k, v]) => {
-      if (!v || v === 'all') sp.delete(k)
+      if (!v || v === "all") sp.delete(k)
       else sp.set(k, v)
     })
     const qs = sp.toString()
-    router.push(qs ? `/?${qs}` : '/')
+    router.push(qs ? `/?${qs}` : "/")
   }
 
   useEffect(() => {
@@ -38,11 +45,11 @@ export default function HomeClient() {
       setLoading(true)
       try {
         const sp = new URLSearchParams()
-        if (category !== 'all') sp.set('category', category)
-        if (q.trim()) sp.set('q', q.trim())
+        if (category !== "all") sp.set("category", category)
+        if (gender !== "all") sp.set("gender", gender)
+        if (q.trim()) sp.set("q", q.trim())
 
-        const url = sp.toString() ? `/api/search?${sp.toString()}` : '/api/search'
-
+        const url = sp.toString() ? `/api/search?${sp.toString()}` : "/api/search"
         const res = await fetch(url)
         const data = await res.json()
         setProducts(Array.isArray(data) ? data : [])
@@ -55,12 +62,13 @@ export default function HomeClient() {
     }
 
     load()
-  }, [category, q])
+  }, [category, q, gender])
 
+  // API already filters; this keeps things safe if you later change API behavior.
   const visible = useMemo(() => {
     let list = products
 
-    if (category !== 'all') {
+    if (category !== "all") {
       list = list.filter(
         (p) => Array.isArray(p.categories) && p.categories.includes(category)
       )
@@ -69,8 +77,8 @@ export default function HomeClient() {
     if (q.trim()) {
       const k = q.trim().toLowerCase()
       list = list.filter((p) =>
-        [p.title, p.brand, p.store, (p.categories || []).join(' '), p.asin]
-          .join(' ')
+        [p.title, p.brand, p.store, (p.categories || []).join(" "), p.asin]
+          .join(" ")
           .toLowerCase()
           .includes(k)
       )
@@ -82,23 +90,35 @@ export default function HomeClient() {
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
       <section className="mb-10">
-        {/* Search + filter */}
+        {/* Search + filters */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
             value={q}
             onChange={(e) => setParam({ q: e.target.value })}
             placeholder='Search (e.g., "tunic")'
-            className="w-full rounded-full border border-neutral-200 px-4 py-2.5 text-sm outline-none focus:border-neutral-400"
+            className="w-full rounded-full border px-4 py-2.5 text-sm"
           />
 
           <select
             value={category}
             onChange={(e) => setParam({ category: e.target.value })}
-            className="rounded-full border border-neutral-200 px-4 py-2.5 text-sm outline-none focus:border-neutral-400"
+            className="rounded-full border px-4 py-2.5 text-sm"
           >
             {COLLECTIONS.map((c) => (
               <option key={c.value} value={c.value}>
                 {c.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={gender}
+            onChange={(e) => setParam({ gender: e.target.value })}
+            className="rounded-full border px-4 py-2.5 text-sm"
+          >
+            {GENDERS.map((g) => (
+              <option key={g.value} value={g.value}>
+                {g.label}
               </option>
             ))}
           </select>
@@ -114,8 +134,8 @@ export default function HomeClient() {
                 onClick={() => setParam({ category: c.value })}
                 className={`rounded-full border px-3 py-1.5 text-sm transition ${
                   active
-                    ? 'border-neutral-900 bg-neutral-900 text-white'
-                    : 'border-neutral-200 hover:border-neutral-400'
+                    ? "border-neutral-900 bg-neutral-900 text-white"
+                    : "border-neutral-200 hover:border-neutral-400"
                 }`}
               >
                 {c.label}
@@ -126,13 +146,13 @@ export default function HomeClient() {
       </section>
 
       {/* Results header */}
-      <div className="mb-5 text-sm text-neutral-600 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
-        <div>{loading ? 'Loading…' : `Showing ${visible.length} items`}</div>
+      <div className="mb-5 flex flex-col gap-1 text-sm text-neutral-600 sm:flex-row sm:items-center sm:gap-2">
+        <div>{loading ? "Loading…" : `Showing ${visible.length} items`}</div>
 
         {!loading && (
           <div className="text-neutral-500">
-            — we&apos;re updating our catalogue on a daily basis, help us grow it
-            by sending us links to your favorite tall-women friendly items.
+            — we&apos;re updating our catalogue often; help us grow it by sending us links
+            to your favorite tall-friendly items (women &amp; men).
           </div>
         )}
       </div>
@@ -146,7 +166,7 @@ export default function HomeClient() {
               className="animate-pulse rounded-2xl border border-neutral-200"
             >
               <div className="aspect-[4/5] bg-neutral-100" />
-              <div className="p-3 space-y-2">
+              <div className="space-y-2 p-3">
                 <div className="h-3 w-24 rounded bg-neutral-100" />
                 <div className="h-4 w-40 rounded bg-neutral-100" />
               </div>
