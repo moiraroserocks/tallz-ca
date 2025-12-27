@@ -85,9 +85,17 @@ export default function Reviews({ productId }) {
                   <div className="mt-1">
                     {/* one-line preview + expands on hover */}
                     <span className="group relative inline-block cursor-help text-[11px] text-neutral-700">
-                      <span className="block max-w-[520px] truncate">{preview}</span>
-                      <span className="pointer-events-none absolute left-0 top-full z-10 mt-1 hidden w-[520px] rounded-md border bg-white p-2 text-[11px] shadow-lg group-hover:block">
-                        {full}
+                  <span className="relative inline-block text-[11px] text-neutral-700">
+  {/* preview line */}
+  <span className="peer block cursor-help truncate max-w-[520px]">
+    {latest.comment.length > 60
+      ? latest.comment.slice(0, 59) + "…"
+      : latest.comment}
+  </span>
+
+  {/* tooltip – ONLY shows when hovering the preview line */}
+  <span className="pointer-events-none absolute left-0 top-full z-10 mt-1 hidden w-[520px] rounded-md border bg-white p-2 text-[11px] shadow-lg peer-hover:block">
+    {latest.comment}    {full}
                       </span>
                     </span>
                   </div>
