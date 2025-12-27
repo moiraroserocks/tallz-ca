@@ -1,55 +1,13 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-
-function Stars({ value, onChange }) {
-  return (
-    <div className="flex items-center gap-1" aria-label={`Rating ${value} out of 5`}>
-      {[1, 2, 3, 4, 5].map((n) => (
-        <button
-          key={n}
-          type="button"
-          onClick={(e) => {
-            e.preventDefault() // prevents clicking the card link
-            onChange(n)
-          }}
-          className="leading-none"
-          aria-label={`Rate ${n} star${n > 1 ? 's' : ''}`}
-        >
-          <span
-            className={`text-base ${
-              n <= value ? 'text-amber-500' : 'text-neutral-300'
-            }`}
-          >
-            ★
-          </span>
-        </button>
-      ))}
-    </div>
-  )
-}
+import Reviews from './Reviews'
+import { useMemo } from 'react'
 
 export default function ProductCard({ product }) {
-  const storageKey = useMemo(() => `rating:${product.id}`, [product.id])
-  const [rating, setRating] = useState(0)
-
-  useEffect(() => {
-    try {
-      const saved = Number(localStorage.getItem(storageKey) || 0)
-      if (!Number.isNaN(saved)) setRating(saved)
-    } catch {
-      // ignore
-    }
-  }, [storageKey])
-
-  function updateRating(next) {
-    setRating(next)
-    try {
-      localStorage.setItem(storageKey, String(next))
-    } catch {
-      // ignore
-    }
-  }
+  // Stable unique ID for reviews storage
+  const productId = useMemo(() => {
+    return String(product?.id ?? product?.url ?? product?.title ?? '')
+  }, [product?.id, product?.url, product?.title])
 
   return (
     <a
@@ -58,15 +16,17 @@ export default function ProductCard({ product }) {
       rel="noopener noreferrer"
       className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-neutral-300"
     >
-     <div className="bg-neutral-50 h-[170px] sm:h-[190px] flex items-center justify-center overflow-hidden">
-  <img
-    src={product.image}
-    alt={product.title}
-    className="max-h-full max-w-full object-contain"
-    loading="lazy"
-  />
-</div>
+      {/* Image */}
+      <div className="bg-neutral-50 h-[170px] sm:h-[190px] flex items-center justify-center overflow-hidden">
+        <img
+          src={product.image}
+          alt={product.title}
+          className="max-h-full max-w-full object-contain"
+          loading="lazy"
+        />
+      </div>
 
+      {/* Content */}
       <div className="p-3">
         <div className="text-xs text-neutral-500">
           {product.brand || product.store || 'Store'}
@@ -76,13 +36,12 @@ export default function ProductCard({ product }) {
           {product.title}
         </div>
 
-        {/* ⭐ Rating UI (under title) */}
-        <div className="mt-2">
-          <Stars value={rating} onChange={updateRating} />
-          <div className="mt-1 text-[11px] text-neutral-500">
-            {rating ? `Tallz customer ratings: ${rating}/5` : 'Tallz customer ratings'}
+        {/* ⭐ Ratings & comments (shared across all users) */}
+        {productId && (
+          <div className="mt-2">
+            <Reviews productId={productId} />
           </div>
-        </div>
+        )}
 
         <div className="mt-3 flex items-center justify-between">
           {typeof product.price === 'number' ? (
