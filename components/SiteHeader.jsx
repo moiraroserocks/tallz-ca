@@ -1,30 +1,28 @@
-import Link from 'next/link'
-import Image from 'next/image'
+import Link from "next/link"
 
 export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        
-        {/* Left: Logo */}
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="Tallz.ca"
-              width={120}
-              height={32}
-              priority
-              className="h-8 w-auto"
-            />
-          </Link>
-        </div>
 
-        {/* Right: Navigation + CTA */}
+        {/* LEFT: logo + brand text */}
+        <Link href="/" className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Tallz logo"
+            className="h-8 w-auto"
+          />
+
+          <div className="hidden sm:block text-xs text-neutral-500 tracking-tight">
+            curated clothes for tall people
+          </div>
+        </Link>
+
+        {/* RIGHT */}
         <div className="flex items-center gap-3">
           <Link
-            className="text-sm text-neutral-600 hover:text-neutral-900"
             href="/about"
+            className="text-sm text-neutral-600 hover:text-neutral-900"
           >
             About
           </Link>
