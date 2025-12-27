@@ -21,7 +21,9 @@ export default function Reviews({ productId }) {
   const shown = hover || rating;
 
   async function load() {
-    const res = await fetch(`/api/reviews?productId=${encodeURIComponent(productId)}`);
+    const res = await fetch(
+      `/api/reviews?productId=${encodeURIComponent(productId)}`
+    );
     const data = await res.json();
     setAvg(data.averageRating || 0);
     setCount(data.count || 0);
@@ -74,7 +76,9 @@ export default function Reviews({ productId }) {
                 <div className="flex items-center justify-between">
                   <div className="text-[11px]">
                     {"★".repeat(r.rating)}
-                    <span className="text-neutral-300">{"☆".repeat(5 - r.rating)}</span>
+                    <span className="text-neutral-300">
+                      {"☆".repeat(5 - r.rating)}
+                    </span>
                   </div>
                   <div className="text-[10px] text-neutral-500">
                     {new Date(r.created_at).toLocaleDateString()}
@@ -83,24 +87,21 @@ export default function Reviews({ productId }) {
 
                 {full ? (
                   <div className="mt-1">
-                    {/* one-line preview + expands on hover */}
-                    <span className="group relative inline-block cursor-help text-[11px] text-neutral-700">
-                  <span className="relative inline-block text-[11px] text-neutral-700">
-  {/* preview line */}
-  <span className="peer block cursor-help truncate max-w-[520px]">
-    {latest.comment.length > 60
-      ? latest.comment.slice(0, 59) + "…"
-      : latest.comment}
-  </span>
+                    {/* Hover tooltip ONLY when hovering the comment line (peer) */}
+                    <span className="relative inline-block text-[11px] text-neutral-700">
+                      <span className="peer block max-w-[520px] truncate cursor-help">
+                        {preview}
+                      </span>
 
-  {/* tooltip – ONLY shows when hovering the preview line */}
-  <span className="pointer-events-none absolute left-0 top-full z-10 mt-1 hidden w-[520px] rounded-md border bg-white p-2 text-[11px] shadow-lg peer-hover:block">
-    {latest.comment}    {full}
+                      <span className="pointer-events-none absolute left-0 top-full z-10 mt-1 hidden w-[520px] rounded-md border bg-white p-2 text-[11px] shadow-lg peer-hover:block">
+                        {full}
                       </span>
                     </span>
                   </div>
                 ) : (
-                  <div className="mt-1 text-[11px] text-neutral-400">(No comment)</div>
+                  <div className="mt-1 text-[11px] text-neutral-400">
+                    (No comment)
+                  </div>
                 )}
               </div>
             );
@@ -147,11 +148,11 @@ export default function Reviews({ productId }) {
         />
 
         <button
-          className="mt-1 rounded-md bg-black px-3 py-1 text-[11px] text-white disabled:opacity-50"
-          disabled={!rating || submitting}
-          onClick={(e) => e.preventDefault() || submit(e)}
-        >
-          {submitting ? "Saving…" : "Submit"}
+         type="submit"
+  className="mt-1 rounded-md bg-black px-3 py-1 text-[11px] text-white disabled:opacity-50"
+  disabled={!rating || submitting}
+>
+  {submitting ? "Saving…" : "Submit"}
         </button>
       </form>
     </div>
