@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function Star({ filled, ...props }) {
   return (
@@ -17,40 +18,101 @@ export default function Reviews({ productId }) {
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const shown = hover || rating;
 
-  async function load() {
-    const res = await fetch(
-      `/api/reviews?productId=${encodeURIComponent(productId)}`
-    );
-    const data = await res.json();
-    setAvg(data.averageRating || 0);
-    setCount(data.count || 0);
-    setReviews(data.reviews || []);
+  // Tiny in-memory cache so hovering the same product again doesn't refetch immediately
+  const cacheKey = useMemo(() => String(productId || ""), [productId]);
+  const cacheRef = useRef(new Map()); // key -> {avg,count,reviews,ts}
+  const abortRef = useRef(null);
+
+  async function load({ useCache = true } = {}) {
+    if (!cacheKey) return;
+
+    // Serve from cache for 60s
+    const cached = cacheRef.current.get(cacheKey);
+    const now = Date.now();
+    if (useCache && cached && now - cached.ts < 60_000) {
+      setAvg(cached.avg);
+      setCount(cached.count);
+      setReviews(cached.reviews);
+      return;
+    }
+
+    // Abort any in-flight request for this component
+    if (abortRef.current) abortRef.current.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/api/reviews?productId=${encodeURIComponent(cacheKey)}`,
+        { signal: controller.signal }
+      );
+
+      if (!res.ok) {
+        // Don't throw noisy errors; just show empty state
+        setAvg(0);
+        setCount(0);
+        setReviews([]);
+        return;
+      }
+
+      const data = await res.json();
+      const next = {
+        avg: data.averageRating || 0,
+        count: data.count || 0,
+        reviews: Array.isArray(data.reviews) ? data.reviews : [],
+        ts: now,
+      };
+
+      cacheRef.current.set(cacheKey, next);
+      setAvg(next.avg);
+      setCount(next.count);
+      setReviews(next.reviews);
+    } catch (err) {
+      if (err?.name !== "AbortError") {
+        // swallow network errors quietly in dev
+        setAvg(0);
+        setCount(0);
+        setReviews([]);
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    load();
+    load({ useCache: true });
+
+    return () => {
+      if (abortRef.current) abortRef.current.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productId]);
+  }, [cacheKey]);
 
   async function submit(e) {
     e.preventDefault();
-    if (!rating) return;
+    if (!rating || !cacheKey) return;
 
     setSubmitting(true);
     try {
-      await fetch("/api/reviews", {
+      const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId, rating, comment }),
+        body: JSON.stringify({ productId: cacheKey, rating, comment }),
       });
+
+      if (!res.ok) return;
 
       setRating(0);
       setHover(0);
       setComment("");
-      await load();
+
+      // After submit, force refresh (no cache)
+      await load({ useCache: false });
     } finally {
       setSubmitting(false);
     }
@@ -62,6 +124,9 @@ export default function Reviews({ productId }) {
       <div className="flex items-center gap-2">
         <div className="text-xs font-semibold">{avg.toFixed(1)} / 5</div>
         <div className="text-[11px] text-neutral-600">({count})</div>
+        {loading ? (
+          <div className="text-[11px] text-neutral-400">Loading…</div>
+        ) : null}
       </div>
 
       {/* Existing ratings/comments ABOVE the form */}
@@ -72,7 +137,10 @@ export default function Reviews({ productId }) {
             const preview = full.length > 60 ? full.slice(0, 59) + "…" : full;
 
             return (
-              <div key={r.id} className="rounded-md border border-neutral-200 p-2">
+              <div
+                key={r.id}
+                className="rounded-md border border-neutral-200 p-2"
+              >
                 <div className="flex items-center justify-between">
                   <div className="text-[11px]">
                     {"★".repeat(r.rating)}
@@ -87,7 +155,6 @@ export default function Reviews({ productId }) {
 
                 {full ? (
                   <div className="mt-1">
-                    {/* Hover tooltip ONLY when hovering the comment line (peer) */}
                     <span className="relative inline-block text-[11px] text-neutral-700">
                       <span className="peer block max-w-[520px] truncate cursor-help">
                         {preview}
@@ -125,7 +192,7 @@ export default function Reviews({ productId }) {
               key={i}
               filled={i <= shown}
               onClick={(e) => {
-                e.preventDefault(); // avoid clicking card link
+                e.preventDefault();
                 setRating(i);
               }}
               onMouseEnter={() => setHover(i)}
@@ -143,16 +210,16 @@ export default function Reviews({ productId }) {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={500}
-          onClick={(e) => e.preventDefault()} // avoid card link click
-          onMouseDown={(e) => e.preventDefault()} // avoid card link click
+          onClick={(e) => e.preventDefault()}
+          onMouseDown={(e) => e.preventDefault()}
         />
 
         <button
-         type="submit"
-  className="mt-1 rounded-md bg-black px-3 py-1 text-[11px] text-white disabled:opacity-50"
-  disabled={!rating || submitting}
->
-  {submitting ? "Saving…" : "Submit"}
+          type="submit"
+          className="mt-1 rounded-md bg-black px-3 py-1 text-[11px] text-white disabled:opacity-50"
+          disabled={!rating || submitting}
+        >
+          {submitting ? "Saving…" : "Submit"}
         </button>
       </form>
     </div>

@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { query } from "../../../lib/db";
 
 /**
  * GET /api/reviews?productId=...
@@ -15,30 +15,50 @@ export async function GET(req) {
     );
   }
 
-  // Aggregate rating
-  const agg = await sql`
-    SELECT
-      COALESCE(AVG(rating)::numeric(10,2), 0) AS avg_rating,
-      COUNT(*)::int AS count
-    FROM product_reviews
-    WHERE product_id = ${productId}
-  `;
+  try {
+    // Run queries in parallel
+    const [agg, reviews] = await Promise.all([
+      query(
+        `
+        SELECT
+          COALESCE(AVG(rating), 0) AS avg_rating,
+          COUNT(*) AS count
+        FROM product_reviews
+        WHERE product_id = $1
+        `,
+        [productId]
+      ),
+      query(
+        `
+        SELECT id, rating, comment, created_at
+        FROM product_reviews
+        WHERE product_id = $1
+        ORDER BY created_at DESC
+        LIMIT 10
+        `,
+        [productId]
+      ),
+    ]);
 
-  // Latest reviews
-  const reviews = await sql`
-    SELECT id, rating, comment, created_at
-    FROM product_reviews
-    WHERE product_id = ${productId}
-    ORDER BY created_at DESC
-    LIMIT 50
-  `;
-
-  return Response.json({
-    productId,
-    averageRating: Number(agg.rows[0].avg_rating),
-    count: agg.rows[0].count,
-    reviews: reviews.rows,
-  });
+    return Response.json(
+      {
+        productId,
+        averageRating: Number(agg.rows[0]?.avg_rating ?? 0),
+        count: Number(agg.rows[0]?.count ?? 0),
+        reviews: reviews.rows ?? [],
+      },
+      {
+        status: 200,
+        headers: { "Cache-Control": "no-store" },
+      }
+    );
+  } catch (err) {
+    console.error("GET /api/reviews error:", err);
+    return Response.json(
+      { error: "Database error" },
+      { status: 500 }
+    );
+  }
 }
 
 /**
@@ -50,7 +70,10 @@ export async function POST(req) {
 
   const productId = body?.productId;
   const rating = Number(body?.rating);
-  const comment = (body?.comment ?? "").toString().trim().slice(0, 500);
+  const comment = (body?.comment ?? "")
+    .toString()
+    .trim()
+    .slice(0, 500);
 
   if (!productId || !Number.isInteger(rating) || rating < 1 || rating > 5) {
     return Response.json(
@@ -59,11 +82,21 @@ export async function POST(req) {
     );
   }
 
-  await sql`
-    INSERT INTO product_reviews (product_id, rating, comment)
-    VALUES (${productId}, ${rating}, ${comment})
-  `;
+  try {
+    await query(
+      `
+      INSERT INTO product_reviews (product_id, rating, comment)
+      VALUES ($1, $2, $3)
+      `,
+      [productId, rating, comment || null]
+    );
 
-  return new Response(null, { status: 204 });
+    return new Response(null, { status: 204 });
+  } catch (err) {
+    console.error("POST /api/reviews error:", err);
+    return Response.json(
+      { error: "Database error" },
+      { status: 500 }
+    );
+  }
 }
-

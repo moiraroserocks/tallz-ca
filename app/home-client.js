@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import ProductCard from "../components/ProductCard"
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import ProductCard from "../components/ProductCard";
 
 const COLLECTIONS = [
   { label: "All", value: "all" },
@@ -11,81 +11,101 @@ const COLLECTIONS = [
   { label: "Dresses", value: "dresses" },
   { label: "Workout", value: "workout" },
   { label: "Outdoors", value: "outdoors" },
-]
-
-const GENDERS = [
-  { label: "Everyone", value: "all" },
-  { label: "Women", value: "women" },
-  { label: "Men", value: "men" },
-]
+];
 
 export default function HomeClient() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const category = searchParams.get("category") || "all"
-  const gender = searchParams.get("gender") || "all"
-  const q = searchParams.get("q") || ""
+  const category = searchParams.get("category") || "all";
+  const q = searchParams.get("q") || "";
+
+  // Local input state so typing feels instant
+  const [qInput, setQInput] = useState(q);
+
+  // Keep input in sync if user navigates back/forward
+  useEffect(() => {
+    setQInput(q);
+  }, [q]);
 
   function setParam(next) {
-    const sp = new URLSearchParams(searchParams.toString())
+    const sp = new URLSearchParams(searchParams.toString());
     Object.entries(next).forEach(([k, v]) => {
-      if (!v || v === "all") sp.delete(k)
-      else sp.set(k, v)
-    })
-    const qs = sp.toString()
-    router.push(qs ? `/?${qs}` : "/")
+      if (!v || v === "all") sp.delete(k);
+      else sp.set(k, v);
+    });
+    const qs = sp.toString();
+    router.push(qs ? `/?${qs}` : "/");
   }
 
+  // Debounce URL updates while typing
   useEffect(() => {
-    async function load() {
-      setLoading(true)
-      try {
-        const sp = new URLSearchParams()
-        if (category !== "all") sp.set("category", category)
-        if (gender !== "all") sp.set("gender", gender)
-        if (q.trim()) sp.set("q", q.trim())
+    const t = setTimeout(() => {
+      // Only update URL if value changed
+      if ((qInput || "") !== (q || "")) {
+        setParam({ q: qInput });
+      }
+    }, 300);
 
-        const url = sp.toString() ? `/api/search?${sp.toString()}` : "/api/search"
-        const res = await fetch(url)
-        const data = await res.json()
-        setProducts(Array.isArray(data) ? data : [])
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qInput]); // intentionally not depending on setParam to avoid re-creating timer
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function load() {
+      setLoading(true);
+      try {
+        const sp = new URLSearchParams();
+        if (category !== "all") sp.set("category", category);
+        if (q.trim()) sp.set("q", q.trim());
+
+        const url = sp.toString()
+          ? `/api/search?${sp.toString()}`
+          : "/api/search";
+
+        const res = await fetch(url, { signal: controller.signal });
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error(err)
-        setProducts([])
+        if (err?.name !== "AbortError") {
+          console.error(err);
+          setProducts([]);
+        }
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    load()
-  }, [category, gender, q])
+    load();
+    return () => controller.abort();
+  }, [category, q]);
 
-  // Safety filter (optional, keeps UI consistent even if API changes later)
   const visible = useMemo(() => {
-    let list = products
+    let list = products;
 
     if (category !== "all") {
       list = list.filter(
         (p) => Array.isArray(p.categories) && p.categories.includes(category)
-      )
+      );
     }
 
     if (q.trim()) {
-      const k = q.trim().toLowerCase()
+      const k = q.trim().toLowerCase();
       list = list.filter((p) =>
         [p.title, p.brand, p.store, (p.categories || []).join(" "), p.asin]
           .join(" ")
           .toLowerCase()
           .includes(k)
-      )
+      );
     }
 
-    return list
-  }, [products, category, q])
+    return list;
+  }, [products, category, q]);
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
@@ -93,8 +113,8 @@ export default function HomeClient() {
         {/* Search */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
-            value={q}
-            onChange={(e) => setParam({ q: e.target.value })}
+            value={qInput}
+            onChange={(e) => setQInput(e.target.value)}
             placeholder='Search (e.g., "tunic")'
             className="w-full rounded-full border px-4 py-2.5 text-sm"
           />
@@ -103,7 +123,7 @@ export default function HomeClient() {
         {/* Category pills */}
         <div className="mt-5 flex flex-wrap gap-2">
           {COLLECTIONS.map((c) => {
-            const active = category === c.value
+            const active = category === c.value;
             return (
               <button
                 key={c.value}
@@ -117,28 +137,7 @@ export default function HomeClient() {
               >
                 {c.label}
               </button>
-            )
-          })}
-        </div>
-
-        {/* Gender pills (NEW) */}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {GENDERS.map((g) => {
-            const active = gender === g.value
-            return (
-              <button
-                key={g.value}
-                type="button"
-                onClick={() => setParam({ gender: g.value })}
-                className={`rounded-full border px-3 py-1.5 text-sm transition ${
-                  active
-                    ? "border-neutral-900 bg-neutral-900 text-white"
-                    : "border-neutral-200 hover:border-neutral-400"
-                }`}
-              >
-                {g.label}
-              </button>
-            )
+            );
           })}
         </div>
       </section>
@@ -149,8 +148,8 @@ export default function HomeClient() {
 
         {!loading && (
           <div className="text-neutral-500">
-            — we&apos;re updating our catalogue often; help us grow it by sending us links
-            to your favorite tall-friendly items (women &amp; men).
+            — we&apos;re updating our catalogue often; help us grow it by sending us
+            links to your favorite tall-friendly items.
           </div>
         )}
       </div>
@@ -173,11 +172,11 @@ export default function HomeClient() {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {visible.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
+          {products.map((p) => (
+  <ProductCard key={p.id} product={p} />
+))}
         </div>
       )}
     </main>
-  )
+  );
 }

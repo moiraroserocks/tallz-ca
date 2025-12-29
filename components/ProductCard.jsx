@@ -1,13 +1,14 @@
-'use client'
+"use client";
 
-import Reviews from './Reviews'
-import { useMemo } from 'react'
+import { useMemo, useState } from "react";
+import Reviews from "./Reviews";
 
 export default function ProductCard({ product }) {
-  // Stable unique ID for reviews storage
   const productId = useMemo(() => {
-    return String(product?.id ?? product?.url ?? product?.title ?? '')
-  }, [product?.id, product?.url, product?.title])
+    return String(product?.id ?? product?.url ?? product?.title ?? "");
+  }, [product?.id, product?.url, product?.title]);
+
+  const [showReviews, setShowReviews] = useState(false);
 
   return (
     <a
@@ -29,22 +30,47 @@ export default function ProductCard({ product }) {
       {/* Content */}
       <div className="p-3">
         <div className="text-xs text-neutral-500">
-          {product.brand || product.store || 'Store'}
+          {product.brand || product.store || "Store"}
         </div>
 
         <div className="mt-1 text-sm font-medium leading-snug">
           {product.title}
         </div>
 
-        {/* ⭐ Ratings & comments (shared across all users) */}
+        {/* ⭐ Ratings & comments (lazy-load on hover/focus) */}
         {productId && (
           <div className="mt-2">
-            <Reviews productId={productId} />
+            {!showReviews ? (
+              <span
+                role="button"
+                tabIndex={0}
+                onMouseEnter={() => setShowReviews(true)}
+                onFocus={() => setShowReviews(true)}
+                onClick={(e) => e.preventDefault()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setShowReviews(true);
+                  }
+                }}
+                className="inline-block text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
+              >
+                Ratings
+              </span>
+            ) : (
+              // Prevent clicks inside reviews from navigating away
+              <div
+                onClick={(e) => e.preventDefault()}
+                onMouseDown={(e) => e.preventDefault()}
+              >
+                <Reviews productId={productId} />
+              </div>
+            )}
           </div>
         )}
 
         <div className="mt-3 flex items-center justify-between">
-          {typeof product.price === 'number' ? (
+          {typeof product.price === "number" ? (
             <div className="text-sm">
               <span className="font-semibold">${product.price}</span>
               <span className="text-neutral-500"> CAD</span>
@@ -61,5 +87,5 @@ export default function ProductCard({ product }) {
         </div>
       </div>
     </a>
-  )
+  );
 }
