@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export default function SiteHeader() {
   return (
@@ -22,12 +22,19 @@ export default function SiteHeader() {
         </Link>
 
         {/* RIGHT */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <Link
             href="/about"
             className="text-sm text-neutral-600 hover:text-neutral-900"
           >
             About
+          </Link>
+
+          <Link
+            href="/partnerships"
+            className="text-sm text-neutral-600 hover:text-neutral-900"
+          >
+            For Brands
           </Link>
 
           <Link
@@ -40,5 +47,5 @@ export default function SiteHeader() {
 
       </div>
     </header>
-  )
+  );
 }
