@@ -20,7 +20,7 @@ export default function Reviews({ productId }) {
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ show only latest by default; expand on "..."
+  // ✅ Always show latest; expand to see all
   const [expanded, setExpanded] = useState(false);
 
   const shown = hover || rating;
@@ -126,7 +126,7 @@ export default function Reviews({ productId }) {
     const preview = full.length > 60 ? full.slice(0, 59) + "…" : full;
 
     return (
-      <div key={r.id} className="rounded-md border border-neutral-200 p-2">
+      <div className="rounded-md border border-neutral-200 p-2">
         <div className="flex items-center justify-between">
           <div className="text-[11px]">
             {"★".repeat(r.rating)}
@@ -162,30 +162,33 @@ export default function Reviews({ productId }) {
       <div className="flex items-center gap-2">
         <div className="text-xs font-semibold">{avg.toFixed(1)} / 5</div>
         <div className="text-[11px] text-neutral-600">({count})</div>
-        {loading ? <div className="text-[11px] text-neutral-400">Loading…</div> : null}
-
-        {/* "..." toggle appears only if there are additional reviews */}
-        {!loading && rest.length > 0 ? (
-          <button
-            type="button"
-            className="ml-auto text-[12px] text-neutral-500 hover:text-neutral-800"
-            onClick={() => setExpanded((v) => !v)}
-            aria-label={expanded ? "Hide older reviews" : "Show older reviews"}
-            title={expanded ? "Hide older reviews" : "Show older reviews"}
-          >
-            {expanded ? "×" : "…"}
-          </button>
+        {loading ? (
+          <div className="text-[11px] text-neutral-400">Loading…</div>
         ) : null}
       </div>
 
-      {/* Latest review only */}
+      {/* Latest always visible */}
       {latest ? (
-        <div className="mt-2 space-y-1">
+        <div className="mt-2 space-y-2">
           <ReviewRow r={latest} />
 
-          {/* Expanded older reviews */}
+          {/* Toggle to show all (always visible if more exist) */}
+          {rest.length > 0 ? (
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="text-[11px] text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
+              aria-expanded={expanded}
+            >
+              {expanded
+                ? "Hide all comments"
+                : `See all comments (${reviews.length})`}
+            </button>
+          ) : null}
+
+          {/* Older reviews only when expanded */}
           {expanded && rest.length > 0 ? (
-            <div className="mt-2 space-y-1">
+            <div className="space-y-1">
               {rest.map((r) => (
                 <ReviewRow key={r.id} r={r} />
               ))}
