@@ -10,17 +10,11 @@ export default function ProductCard({ product }) {
 
   const [showReviews, setShowReviews] = useState(false);
 
-  // ✅ read stats from /api/search?includeRatings=1
   const avg = Number(product?.averageRating ?? 0);
   const count = Number(product?.reviewCount ?? 0);
 
   return (
-    <a
-      href={product.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-neutral-300"
-    >
+    <div className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-neutral-300">
       {/* Image */}
       <div className="bg-neutral-50 h-[170px] sm:h-[190px] flex items-center justify-center overflow-hidden">
         <img
@@ -41,7 +35,7 @@ export default function ProductCard({ product }) {
           {product.title}
         </div>
 
-        {/* ✅ Show average rating + review count immediately (lightweight) */}
+        {/* Rating summary (loads with page) */}
         <div className="mt-2 flex items-center gap-2 text-xs text-neutral-600">
           {count > 0 ? (
             <>
@@ -53,56 +47,46 @@ export default function ProductCard({ product }) {
             <span className="text-neutral-400">No reviews yet</span>
           )}
 
-          {/* Keep the lazy-load for full reviews/comments */}
+          {/* Toggle details */}
           {productId && !showReviews && (
-            <span
-              role="button"
-              tabIndex={0}
-              onMouseEnter={() => setShowReviews(true)}
-              onFocus={() => setShowReviews(true)}
-              onClick={(e) => e.preventDefault()}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setShowReviews(true);
-                }
-              }}
-              className="ml-auto inline-block text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
+            <button
+              type="button"
+              onClick={() => setShowReviews(true)}
+              className="ml-auto text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
             >
-              Details
-            </span>
+              Add / view reviews
+            </button>
           )}
         </div>
 
-        {/* ⭐ Ratings & comments (still lazy-load) */}
+        {/* Reviews */}
         {productId && showReviews && (
           <div className="mt-2">
-            <div
-              onClick={(e) => e.preventDefault()}
-              onMouseDown={(e) => e.preventDefault()}
-            >
-              <Reviews productId={productId} />
-            </div>
+            <Reviews productId={productId} />
           </div>
         )}
 
+        {/* Bottom row */}
         <div className="mt-3 flex items-center justify-between">
-          {typeof product.price === "number" ? (
-            <div className="text-sm">
-              <span className="font-semibold">${product.price}</span>
-              <span className="text-neutral-500"> CAD</span>
-            </div>
-          ) : (
-            <div />
-          )}
-
-          {product.tall && (
+          {product.tall ? (
             <span className="rounded-full border border-neutral-200 px-2 py-1 text-[11px] text-neutral-700">
               Tall
             </span>
+          ) : (
+            <span />
           )}
+
+          {/* Buy link (ONLY this navigates) */}
+          <a
+            href={product.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-medium text-neutral-700 hover:text-neutral-900 underline-offset-4 hover:underline"
+          >
+            View on Amazon
+          </a>
         </div>
       </div>
-    </a>
+    </div>
   );
 }
