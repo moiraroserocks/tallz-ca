@@ -44,7 +44,6 @@ export default function HomeClient() {
   // Debounce URL updates while typing
   useEffect(() => {
     const t = setTimeout(() => {
-      // Only update URL if value changed
       if ((qInput || "") !== (q || "")) {
         setParam({ q: qInput });
       }
@@ -52,7 +51,7 @@ export default function HomeClient() {
 
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qInput]); // intentionally not depending on setParam to avoid re-creating timer
+  }, [qInput]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -61,14 +60,20 @@ export default function HomeClient() {
       setLoading(true);
       try {
         const sp = new URLSearchParams();
+
         if (category !== "all") sp.set("category", category);
         if (q.trim()) sp.set("q", q.trim());
 
-        const url = sp.toString()
-          ? `/api/search?${sp.toString()}`
-          : "/api/search";
+        // ✅ this is the key: includeRatings=1 so cards can show avg+count
+        sp.set("includeRatings", "1");
 
-        const res = await fetch(url, { signal: controller.signal });
+        const url = `/api/search?${sp.toString()}`;
+
+        const res = await fetch(url, {
+          signal: controller.signal,
+          cache: "no-store",
+        });
+
         const data = await res.json();
         setProducts(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -85,27 +90,9 @@ export default function HomeClient() {
     return () => controller.abort();
   }, [category, q]);
 
-  const visible = useMemo(() => {
-    let list = products;
-
-    if (category !== "all") {
-      list = list.filter(
-        (p) => Array.isArray(p.categories) && p.categories.includes(category)
-      );
-    }
-
-    if (q.trim()) {
-      const k = q.trim().toLowerCase();
-      list = list.filter((p) =>
-        [p.title, p.brand, p.store, (p.categories || []).join(" "), p.asin]
-          .join(" ")
-          .toLowerCase()
-          .includes(k)
-      );
-    }
-
-    return list;
-  }, [products, category, q]);
+  // ✅ Since the API already filters by category + q, visible === products.
+  // Keeping this memo avoids changing other code structure.
+  const visible = useMemo(() => products, [products]);
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
@@ -148,8 +135,8 @@ export default function HomeClient() {
 
         {!loading && (
           <div className="text-neutral-500">
-            — we&apos;re updating our catalogue often; help us grow it by sending us
-            links to your favorite tall-friendly items.
+            — we&apos;re updating our catalogue often; help us grow it by sending
+            us links to your favorite tall-friendly items.
           </div>
         )}
       </div>
@@ -172,9 +159,10 @@ export default function HomeClient() {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {products.map((p) => (
-  <ProductCard key={p.id} product={p} />
-))}
+          {/* ✅ render visible so count + grid match */}
+          {visible.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
         </div>
       )}
     </main>

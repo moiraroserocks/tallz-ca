@@ -10,6 +10,10 @@ export default function ProductCard({ product }) {
 
   const [showReviews, setShowReviews] = useState(false);
 
+  // ✅ read stats from /api/search?includeRatings=1
+  const avg = Number(product?.averageRating ?? 0);
+  const count = Number(product?.reviewCount ?? 0);
+
   return (
     <a
       href={product.url}
@@ -37,35 +41,48 @@ export default function ProductCard({ product }) {
           {product.title}
         </div>
 
-        {/* ⭐ Ratings & comments (lazy-load on hover/focus) */}
-        {productId && (
+        {/* ✅ Show average rating + review count immediately (lightweight) */}
+        <div className="mt-2 flex items-center gap-2 text-xs text-neutral-600">
+          {count > 0 ? (
+            <>
+              <span className="font-semibold">{avg.toFixed(1)}</span>
+              <span aria-hidden>★</span>
+              <span className="text-neutral-500">({count})</span>
+            </>
+          ) : (
+            <span className="text-neutral-400">No reviews yet</span>
+          )}
+
+          {/* Keep the lazy-load for full reviews/comments */}
+          {productId && !showReviews && (
+            <span
+              role="button"
+              tabIndex={0}
+              onMouseEnter={() => setShowReviews(true)}
+              onFocus={() => setShowReviews(true)}
+              onClick={(e) => e.preventDefault()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setShowReviews(true);
+                }
+              }}
+              className="ml-auto inline-block text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
+            >
+              Details
+            </span>
+          )}
+        </div>
+
+        {/* ⭐ Ratings & comments (still lazy-load) */}
+        {productId && showReviews && (
           <div className="mt-2">
-            {!showReviews ? (
-              <span
-                role="button"
-                tabIndex={0}
-                onMouseEnter={() => setShowReviews(true)}
-                onFocus={() => setShowReviews(true)}
-                onClick={(e) => e.preventDefault()}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setShowReviews(true);
-                  }
-                }}
-                className="inline-block text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
-              >
-                Ratings
-              </span>
-            ) : (
-              // Prevent clicks inside reviews from navigating away
-              <div
-                onClick={(e) => e.preventDefault()}
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                <Reviews productId={productId} />
-              </div>
-            )}
+            <div
+              onClick={(e) => e.preventDefault()}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              <Reviews productId={productId} />
+            </div>
           </div>
         )}
 
