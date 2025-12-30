@@ -289,7 +289,7 @@ const PRODUCTS = [
     store: "prettylittlething.ca",
     categories: ["bottoms"],
     tall: true,
-    image: "hhttps://cdn-img.prettylittlething.com/e/a/3/f/ea3f887dfd4308acd0e68169f3efd7ca28f9c709_CNL4596_2_tall_vintage_washed_mid_rise_wide_leg_jeans.jpg?imwidth=600",
+    image: "https://cdn-img.prettylittlething.com/e/a/3/f/ea3f887dfd4308acd0e68169f3efd7ca28f9c709_CNL4596_2_tall_vintage_washed_mid_rise_wide_leg_jeans.jpg?imwidth=600",
     url: "https://www.prettylittlething.ca/tall-vintage-washed-mid-rise-wide-leg-jeans.html?_gl=1*w0xple*_up*MQ..*_ga*Nzc1Njg4MTI1LjE3NjcxMjU3Njc.*_ga_DQY8F6QKJ1*czE3NjcxMjU3NjckbzEkZzEkdDE3NjcxMjU3NjckajYwJGwwJGgwJGR2XzFMbklvN0pPVVJnTWJ4bmxVaks0cXBKcnAwcDVJWE93",
     source: "prettylittlething",
   },
