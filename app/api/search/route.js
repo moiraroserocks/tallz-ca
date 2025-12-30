@@ -311,7 +311,7 @@ const PRODUCTS = [
     store: "ca.boohoo.com",
     categories: ["tops"],
     tall: true,
-    image: "https://mediahub.boohoo.com/hzz01421_grey_xl/female-grey-tall-soft-knit-marl-oversized-high-neck-jumper?w=675&fmt=auto&sm="
+    image: "https://mediahub.boohoo.com/hzz01421_grey_xl/female-grey-tall-soft-knit-marl-oversized-high-neck-jumper?w=675&fmt=auto&sm=",
     url: "https://ca.boohoo.com/tall-soft-knit-marl-oversized-high-neck-jumper/HZZ01421.html",
     source: "ca.boohoo.com",
   },
@@ -322,7 +322,7 @@ const PRODUCTS = [
     store: "ca.boohoo.com",
     categories: ["tops"],
     tall: true,
-    image: "https://mediahub.boohoo.com/hzz38987_stone_xl/female-stone-tall-snake-print-lace-trim-midaxi-dress?w=675&fmt=auto&sm=C"
+    image: "https://mediahub.boohoo.com/hzz38987_stone_xl/female-stone-tall-snake-print-lace-trim-midaxi-dress?w=675&fmt=auto&sm=C",
     url: "https://ca.boohoo.com/tall-snake-print-lace-trim-midaxi-dress/HZZ38987.html",
     source: "ca.boohoo.com",
   },
