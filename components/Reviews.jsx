@@ -20,9 +20,12 @@ export default function Reviews({ productId }) {
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // ✅ show only latest by default; expand on "..."
+  const [expanded, setExpanded] = useState(false);
+
   const shown = hover || rating;
 
-  // Tiny in-memory cache so hovering the same product again doesn't refetch immediately
+  // Tiny in-memory cache so opening the same product again doesn't refetch immediately
   const cacheKey = useMemo(() => String(productId || ""), [productId]);
   const cacheRef = useRef(new Map()); // key -> {avg,count,reviews,ts}
   const abortRef = useRef(null);
@@ -30,7 +33,6 @@ export default function Reviews({ productId }) {
   async function load({ useCache = true } = {}) {
     if (!cacheKey) return;
 
-    // Serve from cache for 60s
     const cached = cacheRef.current.get(cacheKey);
     const now = Date.now();
     if (useCache && cached && now - cached.ts < 60_000) {
@@ -40,7 +42,6 @@ export default function Reviews({ productId }) {
       return;
     }
 
-    // Abort any in-flight request for this component
     if (abortRef.current) abortRef.current.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -53,7 +54,6 @@ export default function Reviews({ productId }) {
       );
 
       if (!res.ok) {
-        // Don't throw noisy errors; just show empty state
         setAvg(0);
         setCount(0);
         setReviews([]);
@@ -62,8 +62,8 @@ export default function Reviews({ productId }) {
 
       const data = await res.json();
       const next = {
-        avg: data.averageRating || 0,
-        count: data.count || 0,
+        avg: Number(data.averageRating || 0),
+        count: Number(data.count || 0),
         reviews: Array.isArray(data.reviews) ? data.reviews : [],
         ts: now,
       };
@@ -74,7 +74,6 @@ export default function Reviews({ productId }) {
       setReviews(next.reviews);
     } catch (err) {
       if (err?.name !== "AbortError") {
-        // swallow network errors quietly in dev
         setAvg(0);
         setCount(0);
         setReviews([]);
@@ -85,6 +84,7 @@ export default function Reviews({ productId }) {
   }
 
   useEffect(() => {
+    setExpanded(false); // reset when switching products
     load({ useCache: true });
 
     return () => {
@@ -110,73 +110,85 @@ export default function Reviews({ productId }) {
       setRating(0);
       setHover(0);
       setComment("");
+      setExpanded(false); // keep compact after submit
 
-      // After submit, force refresh (no cache)
       await load({ useCache: false });
     } finally {
       setSubmitting(false);
     }
   }
 
+  const latest = reviews?.[0];
+  const rest = reviews?.slice(1) ?? [];
+
+  function ReviewRow({ r }) {
+    const full = (r.comment || "").trim();
+    const preview = full.length > 60 ? full.slice(0, 59) + "…" : full;
+
+    return (
+      <div key={r.id} className="rounded-md border border-neutral-200 p-2">
+        <div className="flex items-center justify-between">
+          <div className="text-[11px]">
+            {"★".repeat(r.rating)}
+            <span className="text-neutral-300">{"☆".repeat(5 - r.rating)}</span>
+          </div>
+          <div className="text-[10px] text-neutral-500">
+            {new Date(r.created_at).toLocaleDateString()}
+          </div>
+        </div>
+
+        {full ? (
+          <div className="mt-1">
+            <span className="relative inline-block text-[11px] text-neutral-700">
+              <span className="peer block max-w-[520px] truncate cursor-help">
+                {preview}
+              </span>
+
+              <span className="pointer-events-none absolute left-0 top-full z-10 mt-1 hidden w-[520px] rounded-md border bg-white p-2 text-[11px] shadow-lg peer-hover:block">
+                {full}
+              </span>
+            </span>
+          </div>
+        ) : (
+          <div className="mt-1 text-[11px] text-neutral-400">(No comment)</div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 rounded-lg border border-neutral-200 p-2">
-      {/* Summary (small) */}
+      {/* Summary */}
       <div className="flex items-center gap-2">
         <div className="text-xs font-semibold">{avg.toFixed(1)} / 5</div>
         <div className="text-[11px] text-neutral-600">({count})</div>
-        {loading ? (
-          <div className="text-[11px] text-neutral-400">Loading…</div>
+        {loading ? <div className="text-[11px] text-neutral-400">Loading…</div> : null}
+
+        {/* "..." toggle appears only if there are additional reviews */}
+        {!loading && rest.length > 0 ? (
+          <button
+            type="button"
+            className="ml-auto text-[12px] text-neutral-500 hover:text-neutral-800"
+            onClick={() => setExpanded((v) => !v)}
+            aria-label={expanded ? "Hide older reviews" : "Show older reviews"}
+            title={expanded ? "Hide older reviews" : "Show older reviews"}
+          >
+            {expanded ? "×" : "…"}
+          </button>
         ) : null}
       </div>
 
-      {/* Existing ratings/comments ABOVE the form */}
-      {reviews.length > 0 ? (
+      {/* Latest review only */}
+      {latest ? (
         <div className="mt-2 space-y-1">
-          {reviews.slice(0, 3).map((r) => {
-            const full = (r.comment || "").trim();
-            const preview = full.length > 60 ? full.slice(0, 59) + "…" : full;
+          <ReviewRow r={latest} />
 
-            return (
-              <div
-                key={r.id}
-                className="rounded-md border border-neutral-200 p-2"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="text-[11px]">
-                    {"★".repeat(r.rating)}
-                    <span className="text-neutral-300">
-                      {"☆".repeat(5 - r.rating)}
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-neutral-500">
-                    {new Date(r.created_at).toLocaleDateString()}
-                  </div>
-                </div>
-
-                {full ? (
-                  <div className="mt-1">
-                    <span className="relative inline-block text-[11px] text-neutral-700">
-                      <span className="peer block max-w-[520px] truncate cursor-help">
-                        {preview}
-                      </span>
-
-                      <span className="pointer-events-none absolute left-0 top-full z-10 mt-1 hidden w-[520px] rounded-md border bg-white p-2 text-[11px] shadow-lg peer-hover:block">
-                        {full}
-                      </span>
-                    </span>
-                  </div>
-                ) : (
-                  <div className="mt-1 text-[11px] text-neutral-400">
-                    (No comment)
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          {reviews.length > 3 ? (
-            <div className="text-[11px] text-neutral-500">
-              + {reviews.length - 3} more
+          {/* Expanded older reviews */}
+          {expanded && rest.length > 0 ? (
+            <div className="mt-2 space-y-1">
+              {rest.map((r) => (
+                <ReviewRow key={r.id} r={r} />
+              ))}
             </div>
           ) : null}
         </div>
@@ -184,7 +196,7 @@ export default function Reviews({ productId }) {
         <div className="mt-2 text-[11px] text-neutral-500">No ratings yet.</div>
       )}
 
-      {/* Form BELOW (compact) */}
+      {/* Form */}
       <form onSubmit={submit} className="mt-2">
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((i) => (
