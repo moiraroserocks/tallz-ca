@@ -210,8 +210,6 @@ export default function Reviews({ productId }) {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={500}
-          onClick={(e) => e.preventDefault()}
-          onMouseDown={(e) => e.preventDefault()}
         />
 
         <button
