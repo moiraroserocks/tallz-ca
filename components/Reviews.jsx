@@ -10,6 +10,10 @@ function Star({ filled, ...props }) {
   );
 }
 
+function hasTextComment(r) {
+  return Boolean((r?.comment ?? "").toString().trim());
+}
+
 export default function Reviews({ productId }) {
   const [avg, setAvg] = useState(0);
   const [count, setCount] = useState(0);
@@ -20,7 +24,7 @@ export default function Reviews({ productId }) {
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Always show latest; expand to see all
+  // ✅ always show one "latest comment with text" card; expand for all
   const [expanded, setExpanded] = useState(false);
 
   const shown = hover || rating;
@@ -110,7 +114,7 @@ export default function Reviews({ productId }) {
       setRating(0);
       setHover(0);
       setComment("");
-      setExpanded(false); // keep compact after submit
+      setExpanded(false);
 
       await load({ useCache: false });
     } finally {
@@ -118,11 +122,13 @@ export default function Reviews({ productId }) {
     }
   }
 
-  const latest = reviews?.[0];
-  const rest = reviews?.slice(1) ?? [];
+  // Pick the newest review that has a non-empty comment.
+  // If none have comment text, fall back to the newest review (reviews[0]).
+  const featured =
+    reviews.find((r) => hasTextComment(r)) || reviews[0] || null;
 
   function ReviewRow({ r }) {
-    const full = (r.comment || "").trim();
+    const full = (r.comment || "").toString().trim();
     const preview = full.length > 60 ? full.slice(0, 59) + "…" : full;
 
     return (
@@ -167,29 +173,28 @@ export default function Reviews({ productId }) {
         ) : null}
       </div>
 
-      {/* Latest always visible */}
-      {latest ? (
-        <div className="mt-2 space-y-2">
-          <ReviewRow r={latest} />
+      {/* Featured (latest with text) always visible */}
+      {featured ? (
+        <div className="mt-2 space-y-1">
+          <ReviewRow r={featured} />
 
-          {/* Toggle to show all (always visible if more exist) */}
-          {rest.length > 0 ? (
+          {/* Three dots toggle (only if there are multiple reviews) */}
+          {reviews.length > 1 ? (
             <button
               type="button"
               onClick={() => setExpanded((v) => !v)}
-              className="text-[11px] text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
-              aria-expanded={expanded}
+              className="text-[14px] leading-none text-neutral-500 hover:text-neutral-800"
+              aria-label={expanded ? "Hide all reviews" : "Show all reviews"}
+              title={expanded ? "Hide all reviews" : "Show all reviews"}
             >
-              {expanded
-                ? "Hide all comments"
-                : `See all comments (${reviews.length})`}
+              {expanded ? "×" : "…"}
             </button>
           ) : null}
 
-          {/* Older reviews only when expanded */}
-          {expanded && rest.length > 0 ? (
-            <div className="space-y-1">
-              {rest.map((r) => (
+          {/* All reviews when expanded */}
+          {expanded ? (
+            <div className="mt-2 space-y-1">
+              {reviews.map((r) => (
                 <ReviewRow key={r.id} r={r} />
               ))}
             </div>
