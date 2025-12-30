@@ -333,7 +333,7 @@ const PRODUCTS = [
     store: "miik.ca",
     categories: ["bottoms"],
     tall: true,
-    image: "https://mediahub.boohoo.com/hzz38987_stone_xl/female-stone-tall-snake-print-lace-trim-midaxi-dress?w=675&fmt=auto&sm=Chttps://www.miik.ca/cdn/shop/files/Christal-pull-on-pintuck-dress-pant-black-long-for-women.webp?v=1763670270&width=750",
+    image: "https://www.miik.ca/collections/tall-friendly-bottoms/products/christal-pull-on-pintuck-dress-pant?variant=40309668446282",
     url: "https://www.miik.ca/collections/tall-friendly-bottoms/products/christal-pull-on-pintuck-dress-pant?variant=40309668446282",
     source: "miik.ca",
   },
