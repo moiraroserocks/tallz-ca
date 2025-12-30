@@ -15,15 +15,20 @@ export default function ProductCard({ product }) {
 
   return (
     <div className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-neutral-300">
-      {/* Image */}
-      <div className="bg-neutral-50 h-[170px] sm:h-[190px] flex items-center justify-center overflow-hidden">
+      {/* Image (already links to Amazon) */}
+      <a
+        href={product.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block bg-neutral-50 h-[170px] sm:h-[190px] flex items-center justify-center overflow-hidden"
+      >
         <img
           src={product.image}
           alt={product.title}
           className="max-h-full max-w-full object-contain"
           loading="lazy"
         />
-      </div>
+      </a>
 
       {/* Content */}
       <div className="p-3">
@@ -35,7 +40,7 @@ export default function ProductCard({ product }) {
           {product.title}
         </div>
 
-        {/* Rating summary (loads with page) */}
+        {/* Rating summary */}
         <div className="mt-2 flex items-center gap-2 text-xs text-neutral-600">
           {count > 0 ? (
             <>
@@ -47,8 +52,7 @@ export default function ProductCard({ product }) {
             <span className="text-neutral-400">No reviews yet</span>
           )}
 
-          {/* Toggle details */}
-          {productId && !showReviews && (
+          {!showReviews && productId && (
             <button
               type="button"
               onClick={() => setShowReviews(true)}
@@ -60,32 +64,11 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Reviews */}
-        {productId && showReviews && (
+        {showReviews && productId && (
           <div className="mt-2">
             <Reviews productId={productId} />
           </div>
         )}
-
-        {/* Bottom row */}
-        <div className="mt-3 flex items-center justify-between">
-          {product.tall ? (
-            <span className="rounded-full border border-neutral-200 px-2 py-1 text-[11px] text-neutral-700">
-              Tall
-            </span>
-          ) : (
-            <span />
-          )}
-
-          {/* Buy link (ONLY this navigates) */}
-          <a
-            href={product.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-medium text-neutral-700 hover:text-neutral-900 underline-offset-4 hover:underline"
-          >
-            View on Amazon
-          </a>
-        </div>
       </div>
     </div>
   );
