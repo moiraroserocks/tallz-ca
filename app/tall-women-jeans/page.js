@@ -24,9 +24,12 @@ async function getProducts() {
 export default async function TallWomenJeansPage() {
   const all = await getProducts();
 
-  const jeans = all.filter(
-    (p) => Array.isArray(p.categories) && p.categories.includes("jeans")
-  );
+const jeans = all.filter((p) => {
+  const cats = Array.isArray(p.categories) ? p.categories : [];
+  return cats
+    .map((c) => String(c).trim().toLowerCase())
+    .includes("jeans");
+});
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
