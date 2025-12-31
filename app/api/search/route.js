@@ -367,6 +367,28 @@ const PRODUCTS = [
     url: "https://shop.lululemon.com/en-ca/p/women-pants/Swift-Wide-Leg-Mid-Rise-Pant-MD/_/prod11720572?color=70108",
     source: "lululemon",
   },
+  {
+    id: "pid=8287690033105",
+    title: "Low Rise Long & Lean Jeans",
+    brand: "Gap",
+    store: "gapcanada.ca",
+    categories: ["bottoms","jeans"],
+    tall: true,
+    image: "https://www.gapcanada.ca/webcontent/0061/135/714/cn61135714.jpg",
+    url: "https://www.gapcanada.ca/browse/product.do?pid=828769003&vid=2&pcid=1026616&cid=1026616#pdp-page-content",
+    source: "gap",
+  },
+    {
+    id: "pid=815641003",
+    title: "High Rise ’90s Slim Straight Jeans",
+    brand: "Gap",
+    store: "gapcanada.ca",
+    categories: ["bottoms","jeans"],
+    tall: true,
+    image: "https://www.gapcanada.ca/webcontent/0060/058/319/cn60058319.jpg",
+    url: "https://www.gapcanada.ca/browse/product.do?pid=815641003&vid=2&pcid=1026616&cid=1026616#pdp-page-content",
+    source: "gap",
+  },
 
   // ✅ Paste the rest of your items below this line (from your local file)
 ];
