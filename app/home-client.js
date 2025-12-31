@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "../components/ProductCard";
 
@@ -13,6 +13,10 @@ const COLLECTIONS = [
   { label: "Outdoors", value: "outdoors" },
 ];
 
+function norm(v) {
+  return (v || "").toString().trim();
+}
+
 export default function HomeClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -23,13 +27,40 @@ export default function HomeClient() {
   const category = searchParams.get("category") || "all";
   const q = searchParams.get("q") || "";
 
+  // ✅ NEW: read selected brands from URL (comma-separated)
+  const brandsParam = searchParams.get("brands") || "";
+
   // Local input state so typing feels instant
   const [qInput, setQInput] = useState(q);
+
+  // ✅ NEW: dropdown state
+  const [brandOpen, setBrandOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // ✅ NEW: selected brands Set (derived from URL)
+  const selectedBrands = useMemo(() => {
+    return new Set(
+      brandsParam
+        .split(",")
+        .map((s) => norm(s))
+        .filter(Boolean)
+    );
+  }, [brandsParam]);
 
   // Keep input in sync if user navigates back/forward
   useEffect(() => {
     setQInput(q);
   }, [q]);
+
+  // ✅ NEW: close dropdown on outside click
+  useEffect(() => {
+    function onDocClick(e) {
+      if (!dropdownRef.current) return;
+      if (!dropdownRef.current.contains(e.target)) setBrandOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
 
   function setParam(next) {
     const sp = new URLSearchParams(searchParams.toString());
@@ -39,6 +70,36 @@ export default function HomeClient() {
     });
     const qs = sp.toString();
     router.push(qs ? `/?${qs}` : "/");
+  }
+
+  // ✅ NEW: build brand options from loaded products
+  const brandOptions = useMemo(() => {
+    const m = new Map(); // lower -> display
+    for (const p of products) {
+      const b = norm(p?.brand);
+      if (!b) continue;
+      const key = b.toLowerCase();
+      if (!m.has(key)) m.set(key, b);
+    }
+    return Array.from(m.values()).sort((a, b) => a.localeCompare(b));
+  }, [products]);
+
+  // ✅ NEW: toggle brand selection and persist to URL
+  function toggleBrand(brand) {
+    const b = norm(brand);
+    if (!b) return;
+
+    const next = new Set(selectedBrands);
+    if (next.has(b)) next.delete(b);
+    else next.add(b);
+
+    const value = Array.from(next).join(",");
+    setParam({ brands: value });
+  }
+
+  // ✅ NEW: clear selected brands
+  function clearBrands() {
+    setParam({ brands: "" });
   }
 
   // Debounce URL updates while typing
@@ -64,8 +125,13 @@ export default function HomeClient() {
         if (category !== "all") sp.set("category", category);
         if (q.trim()) sp.set("q", q.trim());
 
-        // ✅ this is the key: includeRatings=1 so cards can show avg+count
+        // ✅ includeRatings=1 so cards can show avg+count
         sp.set("includeRatings", "1");
+
+        // ✅ NEW: brands filter (comma-separated)
+        if (selectedBrands.size > 0) {
+          sp.set("brands", Array.from(selectedBrands).join(","));
+        }
 
         const url = `/api/search?${sp.toString()}`;
 
@@ -88,11 +154,12 @@ export default function HomeClient() {
 
     load();
     return () => controller.abort();
-  }, [category, q]);
+  }, [category, q, selectedBrands]); // ✅ NEW dependency
 
-  // ✅ Since the API already filters by category + q, visible === products.
-  // Keeping this memo avoids changing other code structure.
+  // ✅ Since the API already filters by category + q + brands, visible === products.
   const visible = useMemo(() => products, [products]);
+
+  const selectedBrandCount = selectedBrands.size;
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
@@ -107,8 +174,8 @@ export default function HomeClient() {
           />
         </div>
 
-        {/* Category pills */}
-        <div className="mt-5 flex flex-wrap gap-2">
+        {/* Category pills + Brands dropdown */}
+        <div className="mt-5 flex flex-wrap items-center gap-2">
           {COLLECTIONS.map((c) => {
             const active = category === c.value;
             return (
@@ -126,6 +193,62 @@ export default function HomeClient() {
               </button>
             );
           })}
+
+          {/* ✅ NEW: Brands dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setBrandOpen((v) => !v)}
+              className={`rounded-full border px-3 py-1.5 text-sm transition ${
+                selectedBrandCount > 0
+                  ? "border-neutral-900 bg-white text-neutral-900"
+                  : "border-neutral-200 hover:border-neutral-400"
+              }`}
+            >
+              Brands{selectedBrandCount > 0 ? ` (${selectedBrandCount})` : ""} ▾
+            </button>
+
+            {brandOpen ? (
+              <div className="absolute left-0 z-20 mt-2 w-64 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
+                <div className="flex items-center justify-between px-2 py-1">
+                  <div className="text-xs font-medium text-neutral-700">
+                    Select brands
+                  </div>
+                  {selectedBrandCount > 0 ? (
+                    <button
+                      type="button"
+                      onClick={clearBrands}
+                      className="text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
+                    >
+                      Clear
+                    </button>
+                  ) : null}
+                </div>
+
+                <div className="max-h-64 overflow-auto px-1 py-1">
+                  {brandOptions.length === 0 ? (
+                    <div className="px-2 py-2 text-xs text-neutral-500">
+                      No brands found.
+                    </div>
+                  ) : (
+                    brandOptions.map((b) => (
+                      <label
+                        key={b}
+                        className="flex cursor-pointer items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-neutral-50"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedBrands.has(b)}
+                          onChange={() => toggleBrand(b)}
+                        />
+                        <span className="text-sm text-neutral-800">{b}</span>
+                      </label>
+                    ))
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
       </section>
 
@@ -159,7 +282,6 @@ export default function HomeClient() {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {/* ✅ render visible so count + grid match */}
           {visible.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

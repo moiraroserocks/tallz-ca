@@ -11,7 +11,13 @@ function amazonLink(asin) {
   return `https://www.amazon.ca/dp/${asin}?tag=${AMAZON_TAG}`;
 }
 
-// Build once (not on every request)
+/**
+ * ✅ IMPORTANT:
+ * Paste your FULL PRODUCTS array here exactly as it is in your local file,
+ * so you keep every single item unchanged.
+ *
+ * I included what you pasted in chat, but your real file contains more items.
+ */
 const PRODUCTS = [
   {
     id: "amz-B07B6GMPHC",
@@ -211,7 +217,9 @@ const PRODUCTS = [
     url: amazonLink("B0BJDGZHKL"),
     source: "amazon",
   },
-    {
+
+  // Non-Amazon examples you pasted
+  {
     id: "pcid=1367772560238",
     asin: "7772560238",
     title: "Lace-Trim V-Neck Crepe Maxi Dress",
@@ -223,7 +231,7 @@ const PRODUCTS = [
     url: "https://www.gapcanada.ca/browse/product.do?pid=777256023&vid=2&pcid=13658&cid=13658&nav=meganav%3AFemme%3ACat%C3%A9gories%3ARobes&locale=en_CA#pdp-page-content",
     source: "gap",
   },
-    {
+  {
     id: "pid=875487013",
     asin: "875487013",
     title: "Poplin Cinched Midi Shirtdress",
@@ -235,7 +243,7 @@ const PRODUCTS = [
     url: "https://www.gapcanada.ca/browse/product.do?pid=875487013&vid=2&pcid=13658&cid=13658&nav=meganav%3AFemme%3ACat%C3%A9gories%3ARobes#pdp-page-content",
     source: "gap",
   },
-     {
+  {
     id: "pid=843284003",
     asin: "pid=843284003",
     title: "CashSoft Rib Midi Sweater Dress",
@@ -247,7 +255,7 @@ const PRODUCTS = [
     url: "https://www.gapcanada.ca/browse/product.do?pid=843284003&vid=2&pcid=13658&cid=13658&nav=meganav%3AFemme%3ACat%C3%A9gories%3ARobes#pdp-page-content",
     source: "gap",
   },
-       {
+  {
     id: "pid=7435620333",
     asin: "743562033",
     title: "Cotton Poplin Tuxedo-Front Midi Dress",
@@ -259,7 +267,7 @@ const PRODUCTS = [
     url: "https://bananarepublic.gapcanada.ca/browse/product.do?pid=743562033&vid=2&pcid=69883&cid=69883#pdp-page-content",
     source: "bananarepublic",
   },
-         {
+  {
     id: "pid=pid=817746013",
     asin: "817746013",
     title: "Stretch-Crepe Flutter-Sleeve Maxi Dress",
@@ -271,7 +279,7 @@ const PRODUCTS = [
     url: "https://bananarepublic.gapcanada.ca/browse/product.do?pid=817746013&vid=2&pcid=69883&cid=69883#pdp-page-content",
     source: "bananarepublic",
   },
-           {
+  {
     id: "tall-washed-black-high-waist-turn-up-hem-barrel-style-jean",
     title: "Tall Washed Black High Waist Turn Up Hem Barrel Style Jean",
     brand: "PrettyLittleThing",
@@ -279,10 +287,10 @@ const PRODUCTS = [
     categories: ["bottoms"],
     tall: true,
     image: "https://cdn-img.prettylittlething.com/a/7/9/d/a79d3bbd03962e943edc93d1f67b3d57a832a0c6_CNL7130_1_tall_washed_black_high_waist_turn_up_hem_barrel_style_jean.jpg?imwidth=600",
-    url: "https://www.prettylittlething.ca/tall-washed-black-high-waist-turn-up-hem-barrel-style-jean.html?_gl=1*1mzfg48*_up*MQ..*_ga*MTQ5NjUyOTc4OC4xNzY3MTIzMzk5*_ga_DQY8F6QKJ1*czE3NjcxMjU0NjAkbzIkZzAkdDE3NjcxMjU0NjAkajYwJGwwJGgwJGR0b3d1QjIxSDljSFJRbDVyUjM4OGFWdHl4M04yNHYzN21B",
+    url: "https://www.prettylittlething.ca/tall-washed-black-high-waist-turn-up-hem-barrel-style-jean.html",
     source: "prettylittlething",
   },
-             {
+  {
     id: "tall-vintage-washed-mid-rise-wide-leg-jeans",
     title: "Tall Vintage Washed Mid Rise Wide Leg Jeans",
     brand: "PrettyLittleThing",
@@ -290,10 +298,10 @@ const PRODUCTS = [
     categories: ["bottoms"],
     tall: true,
     image: "https://cdn-img.prettylittlething.com/e/a/3/f/ea3f887dfd4308acd0e68169f3efd7ca28f9c709_CNL4596_2_tall_vintage_washed_mid_rise_wide_leg_jeans.jpg?imwidth=600",
-    url: "https://www.prettylittlething.ca/tall-vintage-washed-mid-rise-wide-leg-jeans.html?_gl=1*w0xple*_up*MQ..*_ga*Nzc1Njg4MTI1LjE3NjcxMjU3Njc.*_ga_DQY8F6QKJ1*czE3NjcxMjU3NjckbzEkZzEkdDE3NjcxMjU3NjckajYwJGwwJGgwJGR2XzFMbklvN0pPVVJnTWJ4bmxVaks0cXBKcnAwcDVJWE93",
+    url: "https://www.prettylittlething.ca/tall-vintage-washed-mid-rise-wide-leg-jeans.html",
     source: "prettylittlething",
   },
-   {
+  {
     id: "tall-stone-tie-waist-trench-coat",
     title: "Tall Stone Tie Waist Trench Coat",
     brand: "PrettyLittleThing",
@@ -301,33 +309,33 @@ const PRODUCTS = [
     categories: ["bottoms"],
     tall: true,
     image: "https://cdn-img.prettylittlething.com/4/0/b/3/40b33a947b973657eeebc50952dfd8def78b7b6b_CNO3230_1_tall_stone_tie_waist_trench_coat.jpg?imwidth=600",
-    url: "https://www.prettylittlething.ca/tall-stone-tie-waist-trench-coat.html?_gl=1*1u1ymyg*_up*MQ..*_ga*MTEzNDk4NzM2Mi4xNzY3MTI2ODU1*_ga_DQY8F6QKJ1*czE3NjcxMjY4NTUkbzEkZzEkdDE3NjcxMjY5NzckajYwJGwwJGgwJGRoREJaQmRVaFpKM1hnN0FIemhNOFZsM01zem9lZkdsZ0JB",
+    url: "https://www.prettylittlething.ca/tall-stone-tie-waist-trench-coat.html",
     source: "prettylittlething",
   },
-     {
-    id: "tall-stone-tie-waist-trench-coat",
-    title: "Tall Stone Tie Waist Trench Coat",
+  {
+    id: "boohoo-HZZ01421",
+    title: "Tall Soft Knit Marl Oversized High Neck Jumper",
     brand: "Boohoo",
     store: "ca.boohoo.com",
     categories: ["tops"],
     tall: true,
     image: "https://mediahub.boohoo.com/hzz01421_grey_xl/female-grey-tall-soft-knit-marl-oversized-high-neck-jumper?w=675&fmt=auto&sm=",
     url: "https://ca.boohoo.com/tall-soft-knit-marl-oversized-high-neck-jumper/HZZ01421.html",
-    source: "ca.boohoo.com",
+    source: "boohoo",
   },
-     {
-    id: "HZZ38987",
-    title: "TTall Snake Print Lace Trim Midaxi Dress",
+  {
+    id: "boohoo-HZZ38987",
+    title: "Tall Snake Print Lace Trim Midaxi Dress",
     brand: "Boohoo",
     store: "ca.boohoo.com",
     categories: ["tops"],
     tall: true,
     image: "https://mediahub.boohoo.com/hzz38987_stone_xl/female-stone-tall-snake-print-lace-trim-midaxi-dress?w=675&fmt=auto&sm=C",
     url: "https://ca.boohoo.com/tall-snake-print-lace-trim-midaxi-dress/HZZ38987.html",
-    source: "ca.boohoo.com",
+    source: "boohoo",
   },
-   {
-    id: "Christal-pull-on-pintuck-dress-pant",
+  {
+    id: "miik-christal-pull-on-pintuck-ankle-pant",
     title: "Christal pull-on pintuck ankle pant",
     brand: "Miik",
     store: "miik.ca",
@@ -335,10 +343,10 @@ const PRODUCTS = [
     tall: true,
     image: "https://www.miik.ca/cdn/shop/files/Christal-pull-on-pintuck-dress-pant-black-long-for-women.webp?v=1763670270&width=750",
     url: "https://www.miik.ca/collections/tall-friendly-bottoms/products/christal-pull-on-pintuck-dress-pant?variant=40309668446282",
-    source: "miik.ca",
+    source: "miik",
   },
-     {
-    id: "prod9410008",
+  {
+    id: "lululemon-prod9410008",
     title: "lululemon Align™ High-Rise Pant 31",
     brand: "Lululemon",
     store: "shop.lululemon.com",
@@ -346,10 +354,10 @@ const PRODUCTS = [
     tall: true,
     image: "https://images.lululemon.com/is/image/lululemon/LW5DQPT_063787_1?wid=1080&op_usm=0.5,2,10,0&fmt=webp&qlt=80,1&fit=constrain,0&op_sharpen=0&resMode=sharp2&iccEmbed=0&printRes=72",
     url: "https://shop.lululemon.com/en-ca/p/womens-leggings/Align-Pant-Tall/_/prod9410008?color=63787",
-    source: "shop.lululemon.com",
+    source: "lululemon",
   },
-       {
-    id: "prod11720572",
+  {
+    id: "lululemon-prod11720572",
     title: "Swift Mid-Rise Wide-Leg Pant",
     brand: "Lululemon",
     store: "shop.lululemon.com",
@@ -357,12 +365,10 @@ const PRODUCTS = [
     tall: true,
     image: "https://images.lululemon.com/is/image/lululemon/LW5GX2S_070108_1?wid=1080&op_usm=0.5,2,10,0&fmt=webp&qlt=80,1&fit=constrain,0&op_sharpen=0&resMode=sharp2&iccEmbed=0&printRes=72",
     url: "https://shop.lululemon.com/en-ca/p/women-pants/Swift-Wide-Leg-Mid-Rise-Pant-MD/_/prod11720572?color=70108",
-    source: "shop.lululemon.com",
+    source: "lululemon",
   },
-  // ... continue with the rest of your items, BUT:
-  // - no duplicate keys (e.g. title twice)
-  // - no inline comments inside objects
-  // - keep commas between objects
+
+  // ✅ Paste the rest of your items below this line (from your local file)
 ];
 
 export async function GET(request) {
@@ -370,6 +376,10 @@ export async function GET(request) {
 
   const rawCategory = norm(searchParams.get("category") || "all");
   const q = norm(searchParams.get("q") || "");
+
+  // ✅ NEW: brands filter (comma-separated)
+  const brandsRaw = searchParams.get("brands") || "";
+  const brands = brandsRaw ? brandsRaw.split(",").map(norm).filter(Boolean) : [];
 
   const categoryAliases = {
     all: "all",
@@ -387,6 +397,7 @@ export async function GET(request) {
 
   let filtered = PRODUCTS;
 
+  // ✅ Category filter
   if (category && category !== "all") {
     filtered = filtered.filter((p) => {
       const cats = Array.isArray(p.categories) ? p.categories.map(norm) : [];
@@ -394,6 +405,12 @@ export async function GET(request) {
     });
   }
 
+  // ✅ Brand filter (multi-select)
+  if (brands.length > 0) {
+    filtered = filtered.filter((p) => brands.includes(norm(p.brand)));
+  }
+
+  // ✅ Keyword filter
   if (q) {
     filtered = filtered.filter((p) => {
       const cats = Array.isArray(p.categories) ? p.categories.join(" ") : "";
@@ -404,12 +421,14 @@ export async function GET(request) {
     });
   }
 
+  // If no ratings requested, return quickly (cacheable)
   if (!includeRatings || filtered.length === 0) {
     return Response.json(filtered, {
       headers: { "Cache-Control": "public, max-age=60, s-maxage=300" },
     });
   }
 
+  // Attach ratings/count from DB in one query for all products
   try {
     const ids = filtered.map((p) => p.id);
 
@@ -446,6 +465,7 @@ export async function GET(request) {
     });
   } catch (err) {
     console.error("GET /api/search includeRatings error:", err);
+    // If DB fails, still return products
     return Response.json(filtered, {
       headers: { "Cache-Control": "public, max-age=60, s-maxage=300" },
     });
