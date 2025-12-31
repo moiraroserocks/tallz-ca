@@ -1,4 +1,5 @@
 import ProductCard from "../../components/ProductCard";
+import { headers } from "next/headers";
 
 export const metadata = {
   title: "Tall Women’s Jeans in Canada | Tallz.ca",
@@ -7,8 +8,10 @@ export const metadata = {
 };
 
 async function getJeans() {
-  const baseUrl =
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
+  const h = await headers();
+  const host = h.get("host");
+  const proto = h.get("x-forwarded-proto") ?? "http";
+  const baseUrl = `${proto}://${host}`;
 
   const res = await fetch(
     `${baseUrl}/api/search?category=jeans&includeRatings=1`,
@@ -16,7 +19,7 @@ async function getJeans() {
   );
 
   if (!res.ok) return [];
-  return await res.json(); // your API returns an array
+  return await res.json(); // API returns an array
 }
 
 export default async function TallWomenJeansPage() {
@@ -40,8 +43,8 @@ export default async function TallWomenJeansPage() {
 
       {jeans.length === 0 ? (
         <p className="text-gray-700">
-          No jeans found from the API. Quick test: open{" "}
-          <code>/api/search?category=jeans</code> and confirm it returns items.
+          No jeans found. (But your API does return jeans — this would indicate a
+          fetch/environment mismatch.)
         </p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
