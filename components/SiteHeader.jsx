@@ -72,6 +72,24 @@ export default function SiteHeader() {
                 >
                   Tall women coats
                 </Link>
+                 <Link
+                  href="/tall-women-dresses"
+                  className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                >
+                  Tall women dresses
+                </Link>
+                 <Link
+                  href="/tall-women-tops"
+                  className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                >
+                  Tall women tops
+                </Link>
+                 <Link
+                  href="/tall-women-workout"
+                  className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                >
+                  Tall women workout clothes
+                </Link>
 
                 <div className="my-1 border-t border-neutral-200" />
 
