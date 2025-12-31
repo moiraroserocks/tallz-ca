@@ -6,30 +6,21 @@ export const metadata = {
     "Discover tall women’s jeans that actually fit. Long inseams, tall-friendly cuts, and trusted retailers shipping to Canada — all curated in one place.",
 };
 
-async function getProducts() {
+async function getJeans() {
   const baseUrl =
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
 
-  // includeRatings=1 ensures averageRating/reviewCount are included (if your API supports it)
-  const res = await fetch(`${baseUrl}/api/search?includeRatings=1`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${baseUrl}/api/search?category=jeans&includeRatings=1`,
+    { cache: "no-store" }
+  );
 
   if (!res.ok) return [];
-
-  const data = await res.json();
-  return Array.isArray(data) ? data : data.products || [];
+  return await res.json(); // your API returns an array
 }
 
 export default async function TallWomenJeansPage() {
-  const all = await getProducts();
-
-const jeans = all.filter((p) => {
-  const cats = Array.isArray(p.categories) ? p.categories : [];
-  return cats
-    .map((c) => String(c).trim().toLowerCase())
-    .includes("jeans");
-});
+  const jeans = await getJeans();
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
@@ -49,8 +40,8 @@ const jeans = all.filter((p) => {
 
       {jeans.length === 0 ? (
         <p className="text-gray-700">
-          No jeans found. Double-check your catalog items include{" "}
-          <code>categories: ["bottoms","jeans"]</code>.
+          No jeans found from the API. Quick test: open{" "}
+          <code>/api/search?category=jeans</code> and confirm it returns items.
         </p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
