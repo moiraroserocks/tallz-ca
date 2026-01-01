@@ -1,10 +1,10 @@
 export const metadata = {
-  title: "About Tallz.ca — How Tall Clothing Is Selected",
+  title: "How Tallz.ca Works — Tall Fit Explained",
   description:
-    "Learn how Tallz.ca selects tall-friendly clothing for tall women in Canada, why standard brands fail tall fit, and how inseam and proportions are evaluated.",
+    "Learn how Tallz.ca selects tall-friendly clothing for tall women in Canada, why standard brands fail tall fit, how inseam and proportions work, and how to shop tall in Canada.",
 };
 
-export default function AboutPage() {
+export default function HowTallzWorksPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-20">
       <h1 className="mb-10 text-3xl font-medium tracking-tight">
@@ -19,8 +19,8 @@ export default function AboutPage() {
 
         <p>
           Unlike standard fashion sites or marketplaces, Tallz.ca does not aim to
-          list everything available. Each product featured is selected because
-          it meets clear tall-fit criteria, with a strong focus on inseam length,
+          list everything available. Each product featured is selected because it
+          meets clear tall-fit criteria, with a strong focus on inseam length,
           proportions, and real-world wearability.
         </p>
 
@@ -50,10 +50,9 @@ export default function AboutPage() {
 
         <div className="space-y-6 text-base leading-relaxed text-gray-800">
           <p>
-            Most mainstream clothing brands design garments using a
-            standard-height fit model, typically around 5’5”–5’7”. When “long”
-            or “tall” options are offered, adjustments are often minimal or
-            inconsistent.
+            Most mainstream clothing brands design garments using a standard-height
+            fit model, typically around 5’5”–5’7”. When “long” or “tall” options
+            are offered, adjustments are often minimal or inconsistent.
           </p>
 
           <p>Common issues include:</p>
@@ -65,9 +64,7 @@ export default function AboutPage() {
               Sleeves and pant legs that are lengthened without adjusting
               proportions
             </li>
-            <li>
-              Coats and jackets that end at awkward points on the body
-            </li>
+            <li>Coats and jackets that end at awkward points on the body</li>
           </ul>
 
           <p>
@@ -85,9 +82,9 @@ export default function AboutPage() {
 
         <div className="space-y-6 text-base leading-relaxed text-gray-800">
           <p>
-            Inseam measures the length from the crotch seam to the hem. For tall
-            women, this often ranges from 34” to 38”, depending on height, leg
-            length, and footwear.
+            <strong>Inseam</strong> measures the length from the crotch seam to the hem.
+            For tall women, this often ranges from <strong>34” to 38”</strong>,
+            depending on height, leg length, and footwear.
           </p>
 
           <p>However, inseam alone does not define a proper tall fit.</p>
@@ -95,18 +92,15 @@ export default function AboutPage() {
           <p>Tall-friendly clothing also accounts for:</p>
 
           <ul className="list-disc space-y-2 pl-6">
-            <li>Rise, which affects where pants sit on the waist</li>
+            <li><strong>Rise</strong>, which affects where pants sit on the waist</li>
             <li>Knee and hip placement, especially in structured garments</li>
             <li>Sleeve length and shoulder positioning</li>
-            <li>
-              Overall garment proportions, not just added fabric at the hem
-            </li>
+            <li>Overall garment proportions, not just added fabric at the hem</li>
           </ul>
 
           <p>
             Tallz.ca prioritizes products designed with these factors in mind,
-            rather than garments that simply extend length without rebalancing
-            the fit.
+            rather than garments that simply extend length without rebalancing the fit.
           </p>
         </div>
       </section>
@@ -118,9 +112,15 @@ export default function AboutPage() {
 
         <div className="space-y-6 text-base leading-relaxed text-gray-800">
           <p>
-            Shopping for tall clothing in Canada comes with additional
-            challenges: limited in-store availability, inconsistent
-            international shipping, and unclear sizing information.
+            Shopping for tall clothing in Canada comes with additional challenges:
+            limited in-store availability, inconsistent international shipping,
+            and unclear sizing information.
+          </p>
+
+          <p>
+            Tallz.ca focuses specifically on tall clothing options that ship to Canada,
+            helping Canadian shoppers avoid international sizing confusion, duties,
+            and unreliable returns.
           </p>
 
           <p>Tallz.ca helps simplify the process by:</p>
@@ -128,24 +128,20 @@ export default function AboutPage() {
           <ul className="list-disc space-y-2 pl-6">
             <li>Curating tall-friendly clothing that ships to Canada</li>
             <li>Highlighting inseam-appropriate options upfront</li>
-            <li>
-              Centralizing tall-compatible products across multiple retailers
-            </li>
+            <li>Centralizing tall-compatible products across multiple retailers</li>
             <li>Eliminating ads, clutter, and irrelevant listings</li>
           </ul>
 
           <p>
-            Instead of searching across dozens of sites, tall women can browse
-            knowing that each product was selected with height and fit as the
-            primary criteria.
+            Instead of searching across dozens of sites, tall women can browse knowing
+            that each product was selected with height and fit as the primary criteria.
           </p>
         </div>
       </section>
 
       <p className="mt-16 text-sm text-gray-500">
-        Products featured on Tallz.ca are selected based on tall-specific fit
-        criteria, measurement transparency, and availability to shoppers in
-        Canada.
+        Products featured on Tallz.ca are selected based on tall-specific fit criteria,
+        measurement transparency, and availability to shoppers in Canada.
       </p>
     </main>
   );

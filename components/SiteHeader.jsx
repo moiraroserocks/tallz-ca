@@ -72,19 +72,22 @@ export default function SiteHeader() {
                 >
                   Tall women coats
                 </Link>
-                 <Link
+
+                <Link
                   href="/tall-women-dresses"
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
                   Tall women dresses
                 </Link>
-                 <Link
+
+                <Link
                   href="/tall-women-tops"
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
                   Tall women tops
                 </Link>
-                 <Link
+
+                <Link
                   href="/tall-women-workout"
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
@@ -99,6 +102,13 @@ export default function SiteHeader() {
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
                   About Tallz
+                </Link>
+
+                <Link
+                  href="/how-tallz-works"
+                  className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                >
+                  How Tallz Works
                 </Link>
 
                 <Link
