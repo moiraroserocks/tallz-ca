@@ -639,17 +639,7 @@ const PRODUCTS = [
     url: "https://www.dsw.com/product/reebok-nano-court-training-shoe---womens/600513?activeColor=charcoalgrey_multicolor",
     source: "dsw",
   },
-  {
-    id: "600513",
-    title: "Reebok Nano Court Training Shoe - Women's",
-    brand: "Reebok",
-    store: "dsw.com",
-    categories: ["shoes","sneakers","workout"],
-    tall: true,
-    image: "https://assets.designerbrands.com/match/Site_Name/600513_030_ss_01/?quality=85&io=transform:fit,width:1280",
-    url: "https://www.dsw.com/product/reebok-nano-court-training-shoe---womens/600513?activeColor=charcoalgrey_multicolor",
-    source: "dsw",
-  },  
+
   // ✅ Paste the rest of your items below this line (from your local file)
 ];
 
