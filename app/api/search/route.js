@@ -570,7 +570,7 @@ const PRODUCTS = [
     source: "amazon",
   },
  {
-    id: "amz-B0BXWJ3R6C"
+    id: "amz-B0BXWJ3R6C",
     asin: "B0BXWJ3R6C",
     title: "Skechers Womens Go Walk Flex Slip-ins - Relish Sneaker",
     brand: "Skechers",
@@ -582,7 +582,7 @@ const PRODUCTS = [
     source: "amazon",
   },
 {
-    id: "amz-B0D9C6F412"
+    id: "amz-B0D9C6F412",
     asin: "B0D9C6F412",
     title: "Skechers Womens Bobs Squad Chaos Current Muse Sneaker",
     brand: "Skechers",
@@ -594,7 +594,7 @@ const PRODUCTS = [
     source: "amazon",
   },
   {
-    id: "amz-B0CJT5FHSY"
+    id: "amz-B0CJT5FHSY",
     asin: "B0CJT5FHSY",
     title: "Under Armour Unisex-Adult Lockdown 7 Sneaker",
     brand: "Under Armour",
@@ -606,7 +606,7 @@ const PRODUCTS = [
     source: "amazon",
   },
     {
-    id: "amz-B0D9781JC9"
+    id: "amz-B0D9781JC9",
     asin: "B0D9781JC9",
     title: "HOBIBEAR Barefoot Minimalist Zero Drop Canvas Slip-on Shoes",
     brand: "Amazon",
@@ -617,19 +617,8 @@ const PRODUCTS = [
     url: amazonLink("B0D9781JC9"),
     source: "amazon",
   },
- {
-    id: "86357"
-    title: "Sam Edelman Loraine Loafer",
-    brand: "",
-    store: "dsw.com",
-    categories: ["shoes"],
-    tall: true,
-    image: "https://assets.designerbrands.com/match/Site_Name/486357_001_ss_01/?quality=85&io=transform:fit,width:1280",
-    url: "https://www.dsw.com/product/dr.-martens-embury-boot---womens/486357?activeColor=001",
-    source: "dsw",
-  },
    {
-    id: "606297"
+    id: "606297",
     title: "Sam Edelman Loraine Loafer",
     brand: "Sam Edelman",
     store: "dsw.com",
@@ -640,7 +629,7 @@ const PRODUCTS = [
     source: "dsw",
   },
 {
-    id: "600513"
+    id: "600513",
     title: "Reebok Nano Court Training Shoe - Women's",
     brand: "Reebok",
     store: "dsw.com",
@@ -651,7 +640,7 @@ const PRODUCTS = [
     source: "dsw",
   },
   {
-    id: "600513"
+    id: "600513",
     title: "Reebok Nano Court Training Shoe - Women's",
     brand: "Reebok",
     store: "dsw.com",
