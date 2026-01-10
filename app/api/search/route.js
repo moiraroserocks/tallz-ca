@@ -558,7 +558,7 @@ const PRODUCTS = [
     source: "amazon",
   },
   {
-    id: "amz-B07PN6B2HJ"
+    id: "amz-B07PN6B2HJ",
     asin: "B07PN6B2HJ",
     title: "Amazon Essentials womens Lace Up Combat Boot Combat Boot",
     brand: "Amazon",
