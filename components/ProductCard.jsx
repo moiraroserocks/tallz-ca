@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Reviews from "./Reviews";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, locale = "en" }) {
   const productId = useMemo(() => {
     return String(product?.id ?? product?.url ?? product?.title ?? "");
   }, [product?.id, product?.url, product?.title]);
@@ -13,9 +13,15 @@ export default function ProductCard({ product }) {
   const avg = Number(product?.averageRating ?? 0);
   const count = Number(product?.reviewCount ?? 0);
 
+  // ✅ Choose title based on locale, with safe fallback
+  const displayTitle =
+    locale === "fr" && product?.title_fr
+      ? product.title_fr
+      : product.title;
+
   return (
     <div className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-neutral-300">
-      {/* Image (already links to Amazon) */}
+      {/* Image (affiliate link stays unchanged) */}
       <a
         href={product.url}
         target="_blank"
@@ -24,7 +30,7 @@ export default function ProductCard({ product }) {
       >
         <img
           src={product.image}
-          alt={product.title}
+          alt={displayTitle}
           className="max-h-full max-w-full object-contain"
           loading="lazy"
         />
@@ -37,7 +43,7 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="mt-1 text-sm font-medium leading-snug">
-          {product.title}
+          {displayTitle}
         </div>
 
         {/* Rating summary */}
@@ -49,7 +55,9 @@ export default function ProductCard({ product }) {
               <span className="text-neutral-500">({count})</span>
             </>
           ) : (
-            <span className="text-neutral-400">No reviews yet</span>
+            <span className="text-neutral-400">
+              {locale === "fr" ? "Aucun avis pour l’instant" : "No reviews yet"}
+            </span>
           )}
 
           {!showReviews && productId && (
@@ -57,19 +65,3 @@ export default function ProductCard({ product }) {
               type="button"
               onClick={() => setShowReviews(true)}
               className="ml-auto text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
-            >
-              Add / view reviews
-            </button>
-          )}
-        </div>
-
-        {/* Reviews */}
-        {showReviews && productId && (
-          <div className="mt-2">
-            <Reviews productId={productId} />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
