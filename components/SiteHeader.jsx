@@ -1,26 +1,44 @@
 import Link from "next/link";
 
-export default function SiteHeader() {
+export default function SiteHeader({ locale = "en" }) {
+  const loc = locale === "fr" ? "fr" : "en";
+
+  // Helper to prefix internal page links with /en or /fr
+  const l = (path) => `/${loc}${path === "/" ? "" : path}`;
+
+  // Basic labels (you can expand later into JSON dictionaries)
+  const t = {
+    tagline: loc === "fr" ? "sélection pensée pour les grandes tailles" : "tailored finds for tall frames",
+    explore: loc === "fr" ? "Explorer" : "Explore",
+    all: loc === "fr" ? "Tous les produits adaptés" : "All tall-friendly products",
+    jeans: loc === "fr" ? "Jeans femmes grandes" : "Tall women jeans",
+    pants: loc === "fr" ? "Pantalons femmes grandes" : "Tall women pants",
+    workwear: loc === "fr" ? "Tenues de travail femmes grandes" : "Tall women workwear",
+    coats: loc === "fr" ? "Manteaux femmes grandes" : "Tall women coats",
+    dresses: loc === "fr" ? "Robes femmes grandes" : "Tall women dresses",
+    tops: loc === "fr" ? "Hauts femmes grandes" : "Tall women tops",
+    workout: loc === "fr" ? "Sport femmes grandes" : "Tall women workout clothes",
+    about: loc === "fr" ? "À propos de Tallz" : "About Tallz",
+    how: loc === "fr" ? "Comment Tallz fonctionne" : "How Tallz Works",
+    brands: loc === "fr" ? "Pour les marques" : "For brands",
+    contact: loc === "fr" ? "Contact" : "Be in touch",
+    langSwitch: loc === "fr" ? "English" : "Français",
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-
         {/* LEFT: logo + brand text */}
-        <Link href="/" className="flex items-baseline gap-3">
-          <img
-            src="/logo.png"
-            alt="Tallz logo"
-            className="h-8 w-auto"
-          />
+        <Link href={l("/")} className="flex items-baseline gap-3">
+          <img src="/logo.png" alt="Tallz logo" className="h-8 w-auto" />
 
           <span className="hidden sm:block text-xs text-neutral-500 tracking-tight relative top-[-6px]">
-            tailored finds for tall frames
+            {t.tagline}
           </span>
         </Link>
 
         {/* RIGHT */}
         <div className="flex items-center gap-4">
-
           {/* Explore dropdown */}
           <div className="relative group">
             <button
@@ -29,107 +47,114 @@ export default function SiteHeader() {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              Explore
+              {t.explore}
               <span className="text-xs">▾</span>
             </button>
 
             {/* Dropdown menu */}
             <div className="absolute right-0 mt-2 w-64 rounded-xl border border-neutral-200 bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
               <nav className="flex flex-col py-2">
-
                 {/* Product pages */}
                 <Link
-                  href="/"
+                  href={l("/")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  All tall-friendly products
+                  {t.all}
                 </Link>
 
                 <Link
-                  href="/tall-women-jeans"
+                  href={l("/tall-women-jeans")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  Tall women jeans
+                  {t.jeans}
                 </Link>
 
                 <Link
-                  href="/tall-women-pants"
+                  href={l("/tall-women-pants")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  Tall women pants
+                  {t.pants}
                 </Link>
 
                 <Link
-                  href="/tall-women-workwear"
+                  href={l("/tall-women-workwear")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  Tall women workwear
+                  {t.workwear}
                 </Link>
 
                 <Link
-                  href="/tall-women-coats"
+                  href={l("/tall-women-coats")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  Tall women coats
+                  {t.coats}
                 </Link>
 
                 <Link
-                  href="/tall-women-dresses"
+                  href={l("/tall-women-dresses")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  Tall women dresses
+                  {t.dresses}
                 </Link>
 
                 <Link
-                  href="/tall-women-tops"
+                  href={l("/tall-women-tops")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  Tall women tops
+                  {t.tops}
                 </Link>
 
                 <Link
-                  href="/tall-women-workout"
+                  href={l("/tall-women-workout")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  Tall women workout clothes
+                  {t.workout}
                 </Link>
 
                 <div className="my-1 border-t border-neutral-200" />
 
                 {/* Informational pages */}
                 <Link
-                  href="/about"
+                  href={l("/about")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  About Tallz
+                  {t.about}
                 </Link>
 
                 <Link
-                  href="/how-tallz-works"
+                  href={l("/how-tallz-works")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  How Tallz Works
+                  {t.how}
                 </Link>
 
                 <Link
-                  href="/partnerships"
+                  href={l("/partnerships")}
                   className="px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
                 >
-                  For brands
+                  {t.brands}
                 </Link>
               </nav>
             </div>
           </div>
 
+          {/* Language toggle */}
+          <Link
+            href={loc === "fr" ? "/en" : "/fr"}
+            className="text-sm text-neutral-600 hover:text-neutral-900"
+            title={t.langSwitch}
+          >
+            {t.langSwitch}
+          </Link>
+
           {/* Contact button */}
           <Link
-            href="/contact"
+            href={l("/contact")}
             className="rounded-full border border-neutral-200 px-4 py-2 text-sm hover:border-neutral-400"
           >
-            Be in touch
+            {t.contact}
           </Link>
         </div>
-
       </div>
     </header>
   );
