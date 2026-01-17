@@ -9,10 +9,10 @@ export async function generateMetadata({ params }) {
 
   return {
     title: isFr
-      ? "Robes femmes grandes au Canada | Tallz.ca"
+      ? "Robes pour grandes femmes disponibles au Canada | Tallz.ca"
       : "Tall Women’s Dresses in Canada | Tallz.ca",
     description: isFr
-      ? "Découvrez des robes adaptées aux grandes tailles au Canada — meilleures longueurs, taille mieux placée et styles sélectionnés."
+      ? "Découvrez des robes adaptées aux grandes tailles disponibles au Canada — meilleures longueurs, taille mieux placée et styles sélectionnés."
       : "Discover tall-friendly dresses for tall women in Canada — better lengths, proper proportions, and curated styles from trusted retailers.",
   };
 }
@@ -40,7 +40,7 @@ export default async function TallWomenDressesPage({ params }) {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-semibold mb-2">
-        {isFr ? "Robes femmes grandes au Canada" : "Tall Women’s Dresses in Canada"}
+        {isFr ? "Robes pour grandes femmes disponibles au Canada" : "Tall Women’s Dresses in Canada"}
       </h1>
 
       <Link
@@ -75,7 +75,7 @@ export default async function TallWomenDressesPage({ params }) {
       </p>
 
       <h2 className="text-xl font-medium mb-4">
-        {isFr ? "Nos sélections de robes adaptées" : "Our tall-friendly dress picks"}
+        {isFr ? "Notre sélection de robes" : "Our tall-friendly dress picks"}
       </h2>
 
       {dresses.length === 0 ? (

@@ -9,7 +9,7 @@ export async function generateMetadata({ params }) {
 
   return {
     title: isFr
-      ? "Tenues de travail femmes grandes au Canada | Tallz.ca"
+      ? "Tenues de travail pour grandes femmes au Canada | Tallz.ca"
       : "Tall Women’s Workwear in Canada | Tallz.ca",
     description: isFr
       ? "Découvrez des tenues de travail adaptées aux grandes tailles au Canada — pièces soignées, coupes adaptées et sélection Tallz.ca."
@@ -40,7 +40,7 @@ export default async function TallWomenWorkwearPage({ params }) {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-semibold mb-2">
-        {isFr ? "Tenues de travail femmes grandes au Canada" : "Tall Women’s Workwear in Canada"}
+        {isFr ? "Tenues de travail pour grandes femmes disponibles au Canada" : "Tall Women’s Workwear in Canada"}
       </h1>
 
       <Link
@@ -75,7 +75,7 @@ export default async function TallWomenWorkwearPage({ params }) {
       </p>
 
       <h2 className="text-xl font-medium mb-4">
-        {isFr ? "Nos sélections travail adaptées" : "Our tall-friendly workwear picks"}
+        {isFr ? "Notre sélection de vêtements de travail" : "Our tall-friendly workwear picks"}
       </h2>
 
       {workwear.length === 0 ? (

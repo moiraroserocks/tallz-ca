@@ -9,7 +9,7 @@ export async function generateMetadata({ params }) {
 
   return {
     title: isFr
-      ? "Pantalons femmes grandes au Canada | Tallz.ca"
+      ? "Pantalons pour grandes femmes disponibles au Canada | Tallz.ca"
       : "Tall Women’s Pants in Canada | Tallz.ca",
     description: isFr
       ? "Découvrez des pantalons adaptés aux grandes tailles au Canada — entrejambes plus longues, proportions mieux équilibrées et sélection Tallz.ca."
@@ -40,7 +40,7 @@ export default async function TallWomenPantsPage({ params }) {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-semibold mb-2">
-        {isFr ? "Pantalons femmes grandes au Canada" : "Tall Women’s Pants in Canada"}
+        {isFr ? "Pantalons pour grandes femmes disponibles au Canada" : "Tall Women’s Pants in Canada"}
       </h1>
 
       <Link
@@ -75,7 +75,7 @@ export default async function TallWomenPantsPage({ params }) {
       </p>
 
       <h2 className="text-xl font-medium mb-4">
-        {isFr ? "Nos sélections de pantalons adaptés" : "Our tall-friendly pants picks"}
+        {isFr ? "Notre sélection de pantalons adaptés" : "Our tall-friendly pants picks"}
       </h2>
 
       {pants.length === 0 ? (

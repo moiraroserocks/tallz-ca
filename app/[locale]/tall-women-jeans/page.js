@@ -9,10 +9,10 @@ export async function generateMetadata({ params }) {
 
   return {
     title: isFr
-      ? "Jeans femmes grandes au Canada | Tallz.ca"
+      ? "Jeans pour grandes femmes disponibles au Canada | Tallz.ca"
       : "Tall Women’s Jeans in Canada | Tallz.ca",
     description: isFr
-      ? "Découvrez des jeans pour femmes grandes livrés au Canada : entrejambes plus longues, coupes adaptées et options tall-friendly sélectionnées."
+      ? "Découvrez des jeans pour grandes femmes livrés au Canada : entrejambes plus longues, coupes adaptées et options tall-friendly sélectionnées."
       : "Discover tall women’s jeans that actually fit. Long inseams, tall-friendly cuts, and trusted retailers shipping to Canada — all curated in one place.",
   };
 }
@@ -40,7 +40,7 @@ export default async function TallWomenJeansPage({ params }) {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-semibold mb-2">
-        {isFr ? "Jeans femmes grandes au Canada" : "Tall Women’s Jeans in Canada"}
+        {isFr ? "Jeans pour grandes femmes au Canada" : "Tall Women’s Jeans in Canada"}
       </h1>
 
       <Link
@@ -60,7 +60,7 @@ export default async function TallWomenJeansPage({ params }) {
       <p className="mb-6 text-gray-700 leading-relaxed">
         {isFr ? (
           <>
-            Trouver des jeans qui conviennent aux grandes femmes au Canada est souvent frustrant. Les
+            Trouver des jeans qui conviennent aux grandes femmes est souvent frustrant. Les
             entrejambes standards sont généralement trop courtes, et plusieurs détaillants n’indiquent pas
             clairement les tailles « tall ». Tallz.ca sélectionne des jeans adaptés aux grandes tailles, avec
             des entrejambes plus longues, chez des détaillants fiables qui livrent au Canada — pour vous aider
@@ -76,7 +76,7 @@ export default async function TallWomenJeansPage({ params }) {
       </p>
 
       <h2 className="text-xl font-medium mb-4">
-        {isFr ? "Nos sélections de jeans adaptés" : "Our tall-friendly jeans picks"}
+        {isFr ? "Notre sélection de jeans adaptés" : "Our tall-friendly jeans picks"}
       </h2>
 
       {jeans.length === 0 ? (

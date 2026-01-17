@@ -9,8 +9,8 @@ export async function generateMetadata({ params }) {
 
   return {
     title: isFr
-      ? "Manteaux femmes grandes au Canada | Tallz.ca"
-      : "Tall Women’s Coats in Canada | Tallz.ca",
+      ? "Manteaux pour grandes femmes disponibles au Canada | Tallz.ca"
+      : "Tall Women’s Coats available in Canada | Tallz.ca",
     description: isFr
       ? "Découvrez des manteaux adaptés aux grandes tailles au Canada — manches plus longues, proportions équilibrées et sélection Tallz.ca."
       : "Discover tall-friendly coats for tall women in Canada — longer sleeves, better proportions, and curated picks from trusted retailers.",
@@ -40,7 +40,7 @@ export default async function TallWomenCoatsPage({ params }) {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-semibold mb-2">
-        {isFr ? "Manteaux grandes femmes au Canada" : "Tall Women’s Coats in Canada"}
+        {isFr ? "Manteaux pour grandes femmes disponibles au Canada" : "Tall Women’s Coats in Canada"}
       </h1>
 
       <Link
@@ -53,7 +53,7 @@ export default async function TallWomenCoatsPage({ params }) {
       {/* Step 1: bilingual microcopy */}
       <Microcopy className="mb-6">
         {isFr
-          ? "Manteaux pour grandes tailles : manches plus longues, épaules mieux placées et proportions adaptées."
+          ? "Manteaux pour grandes tailles : manches plus longues, épaules et hanches mieux placées et proportions adaptées."
           : "Coats selected for tall proportions: longer sleeves, better shoulders, and balanced fits."}
       </Microcopy>
 
@@ -75,7 +75,7 @@ export default async function TallWomenCoatsPage({ params }) {
       </p>
 
       <h2 className="text-xl font-medium mb-4">
-        {isFr ? "Nos sélections de manteaux adaptés" : "Our tall-friendly coat picks"}
+        {isFr ? "Notre sélection de manteaux" : "Our tall-friendly coat picks"}
       </h2>
 
       {coats.length === 0 ? (
