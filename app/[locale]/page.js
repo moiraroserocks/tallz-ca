@@ -21,7 +21,7 @@ export default async function Page({ params }) {
           </div>
         }
       >
-        <HomeClient />
+        <HomeClient locale={locale} />
       </Suspense>
     </main>
   );
