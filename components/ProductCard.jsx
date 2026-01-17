@@ -65,3 +65,19 @@ export default function ProductCard({ product, locale = "en" }) {
               type="button"
               onClick={() => setShowReviews(true)}
               className="ml-auto text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
+            >
+              {locale === "fr" ? "Ajouter / voir les avis" : "Add / view reviews"}
+            </button>
+          )}
+        </div>
+
+        {/* Reviews */}
+        {showReviews && productId && (
+          <div className="mt-2">
+            <Reviews productId={productId} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
