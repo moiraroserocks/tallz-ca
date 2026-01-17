@@ -4,20 +4,47 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "../components/ProductCard";
 
-const COLLECTIONS = [
-  { label: "All", value: "all" },
-  { label: "Tops", value: "tops" },
-  { label: "Bottoms", value: "bottoms" },
-  { label: "Dresses", value: "dresses" },
-  { label: "Workout", value: "workout" },
-  { label: "Outdoors", value: "outdoors" },
-];
-
 function norm(v) {
   return (v || "").toString().trim();
 }
 
-export default function HomeClient() {
+export default function HomeClient({ locale = "en" }) {
+  const loc = locale === "fr" ? "fr" : "en";
+  const isFr = loc === "fr";
+
+  const t = {
+    // Labels
+    brands: isFr ? "Marques" : "Brands",
+    selectBrands: isFr ? "Choisir des marques" : "Select brands",
+    clear: isFr ? "Effacer" : "Clear",
+    noBrands: isFr ? "Aucune marque trouvée." : "No brands found.",
+
+    // Intro / values text
+    inclusion: isFr
+      ? "Sur Tallz.ca, nous utilisons le terme « grandes femmes » pour décrire plusieurs catégories, car c’est ainsi que ces vêtements sont généralement commercialisés. Cela dit, Tallz.ca s’adresse à toute personne qui trouve ces styles, coupes ou proportions attrayants, indépendamment de son identité de genre."
+      : "Throughout Tallz.ca, we use the word “women” to describe many categories, reflecting how these garments are typically labeled by brands. At the same time, Tallz.ca is for anyone who finds these styles or proportions appealing, regardless of gender identity.",
+    land: isFr
+      ? "Tallz.ca est opéré depuis Sherbrooke, sur le territoire traditionnel non cédé du peuple abénaki (Ndakina). Nous reconnaissons la présence continue et le rôle de gardien·ne·s du territoire des peuples autochtones."
+      : "Tallz.ca is operated from Sherbrooke, Québec, on the unceded traditional territory of the Abenaki people (Ndakina). We acknowledge the enduring presence and stewardship of Indigenous peoples on this land.",
+
+    // Category pills
+    collections: [
+      { label: isFr ? "Tout" : "All", value: "all" },
+      { label: isFr ? "Hauts" : "Tops", value: "tops" },
+      { label: isFr ? "Bas" : "Bottoms", value: "bottoms" },
+      { label: isFr ? "Robes" : "Dresses", value: "dresses" },
+      { label: isFr ? "Sport" : "Workout", value: "workout" },
+      { label: isFr ? "Plein air" : "Outdoors", value: "outdoors" },
+    ],
+
+    // Results header
+    loading: isFr ? "Chargement…" : "Loading…",
+    showing: (n) => (isFr ? `Affichage de ${n} articles` : `Showing ${n} items`),
+    catalogueNote: isFr
+      ? "— nous mettons souvent le catalogue à jour; aidez-nous en nous envoyant des liens vers vos items tall-friendly préférés."
+      : "— we're updating our catalogue often; help us grow it by sending us links to your favorite tall-friendly items.",
+  };
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -25,19 +52,12 @@ export default function HomeClient() {
   const [loading, setLoading] = useState(true);
 
   const category = searchParams.get("category") || "all";
-  const q = searchParams.get("q") || "";
 
-  // ✅ NEW: read selected brands from URL (comma-separated)
+  // Brand filtering
   const brandsParam = searchParams.get("brands") || "";
-
-  // Local input state so typing feels instant
-  const [qInput, setQInput] = useState(q);
-
-  // ✅ NEW: dropdown state
   const [brandOpen, setBrandOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // ✅ NEW: selected brands Set (derived from URL)
   const selectedBrands = useMemo(() => {
     return new Set(
       brandsParam
@@ -47,12 +67,6 @@ export default function HomeClient() {
     );
   }, [brandsParam]);
 
-  // Keep input in sync if user navigates back/forward
-  useEffect(() => {
-    setQInput(q);
-  }, [q]);
-
-  // ✅ NEW: close dropdown on outside click
   useEffect(() => {
     function onDocClick(e) {
       if (!dropdownRef.current) return;
@@ -69,12 +83,11 @@ export default function HomeClient() {
       else sp.set(k, v);
     });
     const qs = sp.toString();
-    router.push(qs ? `/?${qs}` : "/");
+    router.push(qs ? `/${loc}/?${qs}` : `/${loc}`);
   }
 
-  // ✅ NEW: build brand options from loaded products
   const brandOptions = useMemo(() => {
-    const m = new Map(); // lower -> display
+    const m = new Map();
     for (const p of products) {
       const b = norm(p?.brand);
       if (!b) continue;
@@ -84,7 +97,6 @@ export default function HomeClient() {
     return Array.from(m.values()).sort((a, b) => a.localeCompare(b));
   }, [products]);
 
-  // ✅ NEW: toggle brand selection and persist to URL
   function toggleBrand(brand) {
     const b = norm(brand);
     if (!b) return;
@@ -93,26 +105,12 @@ export default function HomeClient() {
     if (next.has(b)) next.delete(b);
     else next.add(b);
 
-    const value = Array.from(next).join(",");
-    setParam({ brands: value });
+    setParam({ brands: Array.from(next).join(",") });
   }
 
-  // ✅ NEW: clear selected brands
   function clearBrands() {
     setParam({ brands: "" });
   }
-
-  // Debounce URL updates while typing
-  useEffect(() => {
-    const t = setTimeout(() => {
-      if ((qInput || "") !== (q || "")) {
-        setParam({ q: qInput });
-      }
-    }, 300);
-
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qInput]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -123,19 +121,13 @@ export default function HomeClient() {
         const sp = new URLSearchParams();
 
         if (category !== "all") sp.set("category", category);
-        if (q.trim()) sp.set("q", q.trim());
-
-        // ✅ includeRatings=1 so cards can show avg+count
         sp.set("includeRatings", "1");
 
-        // ✅ NEW: brands filter (comma-separated)
         if (selectedBrands.size > 0) {
           sp.set("brands", Array.from(selectedBrands).join(","));
         }
 
-        const url = `/api/search?${sp.toString()}`;
-
-        const res = await fetch(url, {
+        const res = await fetch(`/api/search?${sp.toString()}`, {
           signal: controller.signal,
           cache: "no-store",
         });
@@ -154,29 +146,23 @@ export default function HomeClient() {
 
     load();
     return () => controller.abort();
-  }, [category, q, selectedBrands]); // ✅ NEW dependency
+  }, [category, selectedBrands]);
 
-  // ✅ Since the API already filters by category + q + brands, visible === products.
   const visible = useMemo(() => products, [products]);
-
   const selectedBrandCount = selectedBrands.size;
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10">
       <section className="mb-10">
-        {/* Search */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <input
-            value={qInput}
-            onChange={(e) => setQInput(e.target.value)}
-            placeholder='Search (e.g., "tunic")'
-            className="w-full rounded-full border px-4 py-2.5 text-sm"
-          />
+        {/* Intro text */}
+        <div className="max-w-3xl text-sm text-neutral-700 leading-relaxed">
+          <p>{t.inclusion}</p>
+          <p className="mt-3 text-xs text-neutral-500">{t.land}</p>
         </div>
 
         {/* Category pills + Brands dropdown */}
-        <div className="mt-5 flex flex-wrap items-center gap-2">
-          {COLLECTIONS.map((c) => {
+        <div className="mt-6 flex flex-wrap items-center gap-2">
+          {t.collections.map((c) => {
             const active = category === c.value;
             return (
               <button
@@ -194,7 +180,7 @@ export default function HomeClient() {
             );
           })}
 
-          {/* ✅ NEW: Brands dropdown */}
+          {/* Brands dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               type="button"
@@ -205,30 +191,31 @@ export default function HomeClient() {
                   : "border-neutral-200 hover:border-neutral-400"
               }`}
             >
-              Brands{selectedBrandCount > 0 ? ` (${selectedBrandCount})` : ""} ▾
+              {t.brands}
+              {selectedBrandCount > 0 ? ` (${selectedBrandCount})` : ""} ▾
             </button>
 
-            {brandOpen ? (
+            {brandOpen && (
               <div className="absolute left-0 z-20 mt-2 w-64 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
                 <div className="flex items-center justify-between px-2 py-1">
                   <div className="text-xs font-medium text-neutral-700">
-                    Select brands
+                    {t.selectBrands}
                   </div>
-                  {selectedBrandCount > 0 ? (
+                  {selectedBrandCount > 0 && (
                     <button
                       type="button"
                       onClick={clearBrands}
                       className="text-xs text-neutral-500 hover:text-neutral-800 underline-offset-4 hover:underline"
                     >
-                      Clear
+                      {t.clear}
                     </button>
-                  ) : null}
+                  )}
                 </div>
 
                 <div className="max-h-64 overflow-auto px-1 py-1">
                   {brandOptions.length === 0 ? (
                     <div className="px-2 py-2 text-xs text-neutral-500">
-                      No brands found.
+                      {t.noBrands}
                     </div>
                   ) : (
                     brandOptions.map((b) => (
@@ -247,31 +234,22 @@ export default function HomeClient() {
                   )}
                 </div>
               </div>
-            ) : null}
+            )}
           </div>
         </div>
       </section>
 
       {/* Results header */}
       <div className="mb-5 flex flex-col gap-1 text-sm text-neutral-600 sm:flex-row sm:items-center sm:gap-2">
-        <div>{loading ? "Loading…" : `Showing ${visible.length} items`}</div>
-
-        {!loading && (
-          <div className="text-neutral-500">
-            — we&apos;re updating our catalogue often; help us grow it by sending
-            us links to your favorite tall-friendly items.
-          </div>
-        )}
+        <div>{loading ? t.loading : t.showing(visible.length)}</div>
+        {!loading && <div className="text-neutral-500">{t.catalogueNote}</div>}
       </div>
 
       {/* Results */}
       {loading ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="animate-pulse rounded-2xl border border-neutral-200"
-            >
+            <div key={i} className="animate-pulse rounded-2xl border border-neutral-200">
               <div className="aspect-[4/5] bg-neutral-100" />
               <div className="space-y-2 p-3">
                 <div className="h-3 w-24 rounded bg-neutral-100" />
@@ -283,7 +261,7 @@ export default function HomeClient() {
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {visible.map((p) => (
-            <ProductCard key={p.id} product={p} />
+            <ProductCard key={p.id} product={p} locale={loc} />
           ))}
         </div>
       )}
