@@ -39,3 +39,8 @@ export default async function RootLayout({ children, params }) {
     </html>
   );
 }
+<script
+  defer
+  data-domain="tallz.ca"
+  src="https://plausible.io/js/script.js"
+/>
