@@ -67,8 +67,19 @@ export default function SiteHeader({ locale = "en" }) {
             </button>
 
             {/* Dropdown menu */}
-            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-neutral-200 bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-              <nav className="flex flex-col py-2">
+ <div
+  className="
+    absolute mt-2
+    left-0 right-0 w-[calc(100vw-2rem)]
+    sm:left-auto sm:right-0 sm:w-64
+    rounded-xl border border-neutral-200 bg-white shadow-lg
+    opacity-0 invisible group-hover:opacity-100 group-hover:visible
+    transition-all
+  "
+>
+
+              <nav className="flex max-h-[70vh] flex-col overflow-auto py-2">
+
                 {/* Product pages */}
                 <Link
                   href={l("/")}
