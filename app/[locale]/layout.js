@@ -19,6 +19,7 @@ export async function generateMetadata({ params }) {
       ? "Trouvez des vêtements adaptés aux grandes tailles qui livrent au Canada."
       : "Find tall-friendly clothing that ships to Canada.",
     other: {
+      // Impact verification
       "impact-site-verification": "a0c4b259-1226-42b2-957d-84337afc4912",
     },
   };
@@ -31,12 +32,24 @@ export default async function RootLayout({ children, params }) {
   return (
     <html lang={lang}>
       <head>
-        {/* Plausible Analytics */}
+        {/* Privacy-friendly analytics by Plausible */}
         <Script
-          src="https://plausible.io/js/script.js"
-          data-domain="tallz.ca"
+          async
+          src="https://plausible.io/js/pa-X-xV8aoSiv0m5aXT6Z3G8.js"
           strategy="afterInteractive"
         />
+
+        <Script id="plausible-init" strategy="afterInteractive">
+          {`
+            window.plausible = window.plausible || function() {
+              (plausible.q = plausible.q || []).push(arguments)
+            };
+            plausible.init = plausible.init || function(i) {
+              plausible.o = i || {}
+            };
+            plausible.init();
+          `}
+        </Script>
       </head>
 
       <body className="min-h-screen bg-white text-neutral-950">
