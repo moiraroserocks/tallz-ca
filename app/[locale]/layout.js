@@ -1,13 +1,13 @@
 import "../globals.css";
 import SiteHeader from "../../components/SiteHeader";
 import SiteFooter from "../../components/SiteFooter";
+import Script from "next/script";
 
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "fr" }];
 }
 
 export async function generateMetadata({ params }) {
-  // Next 15.5: params may be async in dynamic segments
   const { locale } = await params;
   const isFr = locale === "fr";
 
@@ -25,12 +25,20 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function RootLayout({ children, params }) {
-  // Next 15.5: params may be async in dynamic segments
   const { locale } = await params;
   const lang = locale === "fr" ? "fr" : "en";
 
   return (
     <html lang={lang}>
+      <head>
+        {/* Plausible Analytics */}
+        <Script
+          src="https://plausible.io/js/script.js"
+          data-domain="tallz.ca"
+          strategy="afterInteractive"
+        />
+      </head>
+
       <body className="min-h-screen bg-white text-neutral-950">
         <SiteHeader locale={lang} />
         {children}
@@ -39,8 +47,3 @@ export default async function RootLayout({ children, params }) {
     </html>
   );
 }
-<script
-  defer
-  data-domain="tallz.ca"
-  src="https://plausible.io/js/script.js"
-/>
