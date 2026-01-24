@@ -22,7 +22,7 @@ export default function HomeClient({ locale = "en" }) {
     // Intro / values text
     inclusion: isFr
       ? "Sur Tallz.ca, nous utilisons le terme « grandes femmes » pour décrire plusieurs catégories, car c’est ainsi que ces vêtements sont généralement commercialisés. Cela dit, Tallz.ca s’adresse à toute personne qui trouve ces styles, coupes ou proportions attrayants, indépendamment de son identité de genre."
-      : "Throughout Tallz.ca, we use the word “women” to describe many categories, reflecting how these garments are typically labeled by brands. At the same time, Tallz.ca is for anyone who finds these styles or proportions appealing, regardless of gender identity.",
+      : "Throughout Tallz.ca, we use the word “women” reflecting how these garments are typically labeled by brands. At the same time, Tallz.ca is for anyone who finds these styles or proportions appealing, regardless of gender identity.",
     land: isFr
       ? "Tallz.ca est opéré depuis Sherbrooke, sur le territoire traditionnel non cédé du peuple abénaki (Ndakina). Nous reconnaissons la présence continue et le rôle de gardien·ne·s du territoire des peuples autochtones."
       : "Tallz.ca is operated from Sherbrooke, Québec, on the unceded traditional territory of the Abenaki people (Ndakina). We acknowledge the enduring presence and stewardship of Indigenous peoples on this land.",
@@ -34,7 +34,8 @@ export default function HomeClient({ locale = "en" }) {
       { label: isFr ? "Bas" : "Bottoms", value: "bottoms" },
       { label: isFr ? "Robes" : "Dresses", value: "dresses" },
       { label: isFr ? "Sport" : "Workout", value: "workout" },
-      { label: isFr ? "Plein air" : "Outdoors", value: "outdoors" },
+      { label: isFr ? "Manteaux" : "Coats", value: "coats" },
+      { label: isFr ? "Pour le travail" : "Work", value: "workwear" },
     ],
 
     // Results header
