@@ -5,7 +5,7 @@ export default async function Page({ params }) {
   const { locale } = await params;
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-12">
+    <main className="mx-auto max-w-7xl px-4">
       <Suspense
         fallback={
           <div className="py-10 text-sm text-neutral-600">
