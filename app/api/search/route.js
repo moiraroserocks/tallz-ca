@@ -20,6 +20,19 @@ function amazonLink(asin) {
  */
 const PRODUCTS = [
     {
+    id: "sheertexshaping",
+    asin: "sherrtexshaping",
+    title: "Luxury Shaping Sheer Rip-Resist Tights",
+    title_fr: "Collants de luxe résistants aux déchirures",
+    brand: "Sheertex",
+    store: "ca.sheertex.com",
+    categories: ["bottoms","workwear"],
+    tall: true,
+    image: "https://cdn.shopify.com/s/files/1/0706/3905/9229/files/1_Shaping_Black_Lola_XL_Web_523655aa-e280-4656-b5d9-21e5dcdc5bdb.jpg?v=1766157400&width=800&height=1200&crop=center",
+    url: "https://ca.sheertex.com/products/shaping-sheer-rip-resist-tights?Color=Black&Size=M",
+    source: "ca.sheertex.com",
+  },
+    {
     id: "PLTblzr1",
     asin: "PLTblzr1",
     title: "Tall Ecru Curved Hem Tailored Style Denim Blazer",
@@ -33,6 +46,19 @@ const PRODUCTS = [
     source: "prettylittlething.ca",
   },
     {
+    id: "sheertexclassic",
+    asin: "sheertexclassic",
+    title: "Classic Semi-Opaque Rip-Resist Tights",
+    title_fr: "Collants classiques semi-opaques résistants aux déchirures",
+    brand: "Sheertex",
+    store: "ca.sheertex.com",
+    categories: ["bottoms","workwear"],
+    tall: true,
+    image: "https://cdn.shopify.com/s/files/1/0706/3905/9229/files/SEMIOPAQUERIPRESIST_PREMELA-L_BLK_01_2.jpg?v=1766157329&width=1600&height=2400&crop=center",
+    url: "https://ca.sheertex.com/products/classic-semi-opaque-rip-resist-tights?Size=M&Color=Black",
+    source: "Sheertex",
+  },   
+ {
     id: "pid=843284003",
     asin: "pid=843284003",
     title: "CashSoft Rib Midi Sweater Dress",
